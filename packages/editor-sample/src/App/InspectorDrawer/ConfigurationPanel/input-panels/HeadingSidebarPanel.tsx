@@ -26,9 +26,9 @@ export default function HeadingSidebarPanel({ data, setData }: HeadingSidebarPan
   };
 
   return (
-    <BaseSidebarPanel title="Heading block">
+    <BaseSidebarPanel title="KOPTEKST BLOK">
       <TextInput
-        label="Content"
+        label="Inhoud"
         rows={3}
         defaultValue={data.props?.text ?? HeadingPropsDefaults.text}
         onChange={(text) => {
@@ -36,7 +36,7 @@ export default function HeadingSidebarPanel({ data, setData }: HeadingSidebarPan
         }}
       />
       <RadioGroupInput
-        label="Level"
+        label="Niveau"
         defaultValue={data.props?.level ?? HeadingPropsDefaults.level}
         onChange={(level) => {
           updateData({ ...data, props: { ...data.props, level } });

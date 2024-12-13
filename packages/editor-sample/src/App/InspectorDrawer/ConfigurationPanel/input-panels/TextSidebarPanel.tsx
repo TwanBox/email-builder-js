@@ -25,9 +25,9 @@ export default function TextSidebarPanel({ data, setData }: TextSidebarPanelProp
   };
 
   return (
-    <BaseSidebarPanel title="Text block">
+    <BaseSidebarPanel title="TEKST BLOK">
       <TextInput
-        label="Content"
+        label="Inhoud"
         rows={5}
         defaultValue={data.props?.text ?? ''}
         onChange={(text) => updateData({ ...data, props: { ...data.props, text } })}

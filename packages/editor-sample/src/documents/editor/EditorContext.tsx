@@ -86,12 +86,27 @@ export function resetDocument(document: TValue['document']) {
 
 export function setDocument(document: TValue['document']) {
   const originalDocument = editorStateStore.getState().document;
-  return editorStateStore.setState({
+
+  editorStateStore.setState({
     document: {
       ...originalDocument,
       ...document,
     },
   });
+
+  const newConfig = editorStateStore.getState().document;
+
+  if (window.parent) {
+    window.parent.postMessage(
+      {
+        type: "CONFIG_UPDATED",
+        payload: newConfig
+      },
+      "*"
+    );
+  }
+
+  return newConfig;
 }
 
 export function toggleInspectorDrawerOpen() {

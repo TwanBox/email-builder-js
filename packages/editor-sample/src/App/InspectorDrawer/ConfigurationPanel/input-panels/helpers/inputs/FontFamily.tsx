@@ -29,7 +29,7 @@ export function NullableFontFamily({ label, onChange, defaultValue }: NullablePr
         onChange(v === null ? null : v);
       }}
     >
-      <MenuItem value="inherit">Match email settings</MenuItem>
+      <MenuItem value="inherit">E-mailinstellingen overnemen</MenuItem>
       {OPTIONS}
     </TextField>
   );

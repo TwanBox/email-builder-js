@@ -22,7 +22,7 @@ export default function ContainerSidebarPanel({ data, setData }: ContainerSideba
     }
   };
   return (
-    <BaseSidebarPanel title="Container block">
+    <BaseSidebarPanel title="Container blok">
       <MultiStylePropertyPanel
         names={['backgroundColor', 'borderColor', 'borderRadius', 'padding']}
         value={data.style}

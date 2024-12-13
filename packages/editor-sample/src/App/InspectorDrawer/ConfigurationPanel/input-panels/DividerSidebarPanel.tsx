@@ -28,14 +28,14 @@ export default function DividerSidebarPanel({ data, setData }: DividerSidebarPan
   const lineHeight = data.props?.lineHeight ?? DividerPropsDefaults.lineHeight;
 
   return (
-    <BaseSidebarPanel title="Divider block">
+    <BaseSidebarPanel title="Lijn blok">
       <ColorInput
-        label="Color"
+        label="Kleur"
         defaultValue={lineColor}
         onChange={(lineColor) => updateData({ ...data, props: { ...data.props, lineColor } })}
       />
       <SliderInput
-        label="Height"
+        label="Hoogte"
         iconLabel={<HeightOutlined sx={{ color: 'text.secondary' }} />}
         units="px"
         step={1}

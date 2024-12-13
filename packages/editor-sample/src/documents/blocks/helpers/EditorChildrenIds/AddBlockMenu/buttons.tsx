@@ -22,12 +22,12 @@ type TButtonProps = {
 };
 export const BUTTONS: TButtonProps[] = [
   {
-    label: 'Heading',
+    label: 'Koptekst',
     icon: <HMobiledataOutlined />,
     block: () => ({
       type: 'Heading',
       data: {
-        props: { text: 'Hello friend' },
+        props: { text: 'Hallo' },
         style: {
           padding: { top: 16, bottom: 16, left: 24, right: 24 },
         },
@@ -35,12 +35,12 @@ export const BUTTONS: TButtonProps[] = [
     }),
   },
   {
-    label: 'Text',
+    label: 'Tekst',
     icon: <NotesOutlined />,
     block: () => ({
       type: 'Text',
       data: {
-        props: { text: 'My new text block' },
+        props: { text: 'Mijn nieuwe tekstblok' },
         style: {
           padding: { top: 16, bottom: 16, left: 24, right: 24 },
           fontWeight: 'normal',
@@ -50,28 +50,28 @@ export const BUTTONS: TButtonProps[] = [
   },
 
   {
-    label: 'Button',
+    label: 'Knop',
     icon: <SmartButtonOutlined />,
     block: () => ({
       type: 'Button',
       data: {
         props: {
-          text: 'Button',
-          url: 'https://www.usewaypoint.com',
+          text: 'Knop',
+          url: 'https://www.telecalendar.com'
         },
         style: { padding: { top: 16, bottom: 16, left: 24, right: 24 } },
       },
     }),
   },
   {
-    label: 'Image',
+    label: 'Afbeelding',
     icon: <ImageOutlined />,
     block: () => ({
       type: 'Image',
       data: {
         props: {
-          url: 'https://assets.usewaypoint.com/sample-image.jpg',
-          alt: 'Sample product',
+          url: 'https://fakeimg.pl/600x400',
+          alt: 'Voorbeeld afbeelding',
           contentAlignment: 'middle',
           linkHref: null,
         },
@@ -94,7 +94,7 @@ export const BUTTONS: TButtonProps[] = [
     }),
   },
   {
-    label: 'Divider',
+    label: 'Lijn',
     icon: <HorizontalRuleOutlined />,
     block: () => ({
       type: 'Divider',
@@ -107,7 +107,7 @@ export const BUTTONS: TButtonProps[] = [
     }),
   },
   {
-    label: 'Spacer',
+    label: 'Spatie',
     icon: <Crop32Outlined />,
     block: () => ({
       type: 'Spacer',
@@ -130,7 +130,7 @@ export const BUTTONS: TButtonProps[] = [
     }),
   },
   {
-    label: 'Columns',
+    label: 'Kolommen',
     icon: <ViewColumnOutlined />,
     block: () => ({
       type: 'ColumnsContainer',

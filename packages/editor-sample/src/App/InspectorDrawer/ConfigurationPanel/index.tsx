@@ -30,7 +30,7 @@ export default function ConfigurationPanel() {
   const selectedBlockId = useSelectedBlockId();
 
   if (!selectedBlockId) {
-    return renderMessage('Click on a block to inspect.');
+    return renderMessage('Klik op een blok om te inspecteren.');
   }
   const block = document[selectedBlockId];
   if (!block) {

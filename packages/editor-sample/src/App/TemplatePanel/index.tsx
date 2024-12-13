@@ -21,10 +21,42 @@ import JsonPanel from './JsonPanel';
 import MainTabsGroup from './MainTabsGroup';
 import ShareButton from './ShareButton';
 
+import validateJsonStringValue from './ImportJson/validateJsonStringValue';
+import { resetDocument } from '../../documents/editor/EditorContext';
+
 export default function TemplatePanel() {
   const document = useDocument();
   const selectedMainTab = useSelectedMainTab();
   const selectedScreenSize = useSelectedScreenSize();
+
+  React.useEffect(() => {
+    const handleMessage = (event: any) => {
+      if (event.origin !== "http://localhost:3000") return
+
+      if (event.data.type === "LOAD_TEMPLATE") {
+        const config = event.data.payload.config;
+        console.log("Received template config: ", config);
+        // Load the config into your editor logic
+        
+        const { error, data } = validateJsonStringValue(JSON.stringify(config));
+        // handle errors
+        if (error) {
+          console.error("Invalid JSON:", error);
+        } else {
+          if (!data) {
+            return;
+          }
+          resetDocument(data);
+        }
+      }
+    };
+
+    window.addEventListener("message", handleMessage);
+
+    return () => {
+      window.removeEventListener("message", handleMessage);
+    };
+}, []);
 
   let mainBoxSx: SxProps = {
     height: '100%',
@@ -95,21 +127,21 @@ export default function TemplatePanel() {
             <MainTabsGroup />
           </Stack>
           <Stack direction="row" spacing={2}>
-            <DownloadJson />
-            <ImportJson />
+            {/* <DownloadJson />
+            <ImportJson /> */}
             <ToggleButtonGroup value={selectedScreenSize} exclusive size="small" onChange={handleScreenSizeChange}>
               <ToggleButton value="desktop">
-                <Tooltip title="Desktop view">
+                <Tooltip title="Desktop weergave">
                   <MonitorOutlined fontSize="small" />
                 </Tooltip>
               </ToggleButton>
               <ToggleButton value="mobile">
-                <Tooltip title="Mobile view">
+                <Tooltip title="Mobiele weergave">
                   <PhoneIphoneOutlined fontSize="small" />
                 </Tooltip>
               </ToggleButton>
             </ToggleButtonGroup>
-            <ShareButton />
+            {/* <ShareButton /> */}
           </Stack>
         </Stack>
         <ToggleInspectorPanelButton />

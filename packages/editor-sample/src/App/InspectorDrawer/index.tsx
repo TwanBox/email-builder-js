@@ -34,8 +34,8 @@ export default function InspectorDrawer() {
       <Box sx={{ width: INSPECTOR_DRAWER_WIDTH, height: 49, borderBottom: 1, borderColor: 'divider' }}>
         <Box px={2}>
           <Tabs value={selectedSidebarTab} onChange={(_, v) => setSidebarTab(v)}>
-            <Tab value="styles" label="Styles" />
-            <Tab value="block-configuration" label="Inspect" />
+            <Tab value="styles" label="Opmaak" />
+            <Tab value="block-configuration" label="Inspecteren" />
           </Tabs>
         </Box>
       </Box>

@@ -20,8 +20,8 @@ export default function FontWeightInput({ label, defaultValue, onChange }: Props
         onChange(fontWeight);
       }}
     >
-      <ToggleButton value="normal">Regular</ToggleButton>
-      <ToggleButton value="bold">Bold</ToggleButton>
+      <ToggleButton value="normal">Normaal</ToggleButton>
+      <ToggleButton value="bold">Vet</ToggleButton>
     </RadioGroupInput>
   );
 }

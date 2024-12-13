@@ -25,9 +25,9 @@ export default function SingleStylePropertyPanel({ name, value, onChange }: Styl
 
   switch (name) {
     case 'backgroundColor':
-      return <NullableColorInput label="Background color" defaultValue={defaultValue} onChange={handleChange} />;
+      return <NullableColorInput label="Achtergrondkleur" defaultValue={defaultValue} onChange={handleChange} />;
     case 'borderColor':
-      return <NullableColorInput label="Border color" defaultValue={defaultValue} onChange={handleChange} />;
+      return <NullableColorInput label="Randkleur" defaultValue={defaultValue} onChange={handleChange} />;
     case 'borderRadius':
       return (
         <SliderInput
@@ -37,21 +37,21 @@ export default function SingleStylePropertyPanel({ name, value, onChange }: Styl
           marks
           min={0}
           max={48}
-          label="Border radius"
+          label="Randradius"
           defaultValue={defaultValue}
           onChange={handleChange}
         />
       );
     case 'color':
-      return <NullableColorInput label="Text color" defaultValue={defaultValue} onChange={handleChange} />;
+      return <NullableColorInput label="Tekstkleur" defaultValue={defaultValue} onChange={handleChange} />;
     case 'fontFamily':
-      return <NullableFontFamily label="Font family" defaultValue={defaultValue} onChange={handleChange} />;
+      return <NullableFontFamily label="Lettertype" defaultValue={defaultValue} onChange={handleChange} />;
     case 'fontSize':
-      return <FontSizeInput label="Font size" defaultValue={defaultValue} onChange={handleChange} />;
+      return <FontSizeInput label="Lettergrootte" defaultValue={defaultValue} onChange={handleChange} />;
     case 'fontWeight':
-      return <FontWeightInput label="Font weight" defaultValue={defaultValue} onChange={handleChange} />;
+      return <FontWeightInput label="Lettergewicht" defaultValue={defaultValue} onChange={handleChange} />;
     case 'textAlign':
-      return <TextAlignInput label="Alignment" defaultValue={defaultValue} onChange={handleChange} />;
+      return <TextAlignInput label="Uitlijning" defaultValue={defaultValue} onChange={handleChange} />;
     case 'padding':
       return <PaddingInput label="Padding" defaultValue={defaultValue} onChange={handleChange} />;
   }
