@@ -31,7 +31,7 @@ export default function TemplatePanel() {
 
   React.useEffect(() => {
     const handleMessage = (event: any) => {
-      if (event.origin !== "http://localhost:3000") return
+      // if (event.origin !== process.env.BASE_URL) return
 
       if (event.data.type === "LOAD_TEMPLATE") {
         const config = event.data.payload.config;
