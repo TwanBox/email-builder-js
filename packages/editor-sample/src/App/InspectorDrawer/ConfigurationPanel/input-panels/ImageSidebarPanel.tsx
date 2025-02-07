@@ -34,7 +34,7 @@ export default function ImageSidebarPanel({ data, setData }: ImageSidebarPanelPr
   return (
     <BaseSidebarPanel title="Afbeelding blok">
       <TextInput
-        label="Bron-URL"
+        label="Web-URL (https)"
         defaultValue={data.props?.url ?? ''}
         onChange={(v) => {
           const url = v.trim().length === 0 ? null : v.trim();
