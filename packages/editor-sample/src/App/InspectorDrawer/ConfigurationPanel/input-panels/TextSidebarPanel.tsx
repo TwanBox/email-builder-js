@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { TextProps, TextPropsSchema } from '@usewaypoint/block-text';
 
 import BaseSidebarPanel from './helpers/BaseSidebarPanel';
-import BooleanInput from './helpers/inputs/BooleanInput';
+// import BooleanInput from './helpers/inputs/BooleanInput';
 import TextInput from './helpers/inputs/TextInput';
 import MultiStylePropertyPanel from './helpers/style-inputs/MultiStylePropertyPanel';
 
