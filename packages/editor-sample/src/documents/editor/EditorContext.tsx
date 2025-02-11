@@ -8,7 +8,7 @@ type TValue = {
   document: TEditorConfiguration;
 
   selectedBlockId: string | null;
-  selectedSidebarTab: 'block-configuration' | 'styles';
+  selectedSidebarTab: 'block-configuration' | 'styles' | 'default-variables';
   selectedMainTab: 'editor' | 'preview' | 'json' | 'html';
   selectedScreenSize: 'desktop' | 'mobile';
 
