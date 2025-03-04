@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Box, Drawer, Tab, Tabs } from '@mui/material';
+import { Box, Drawer, Tab, Tabs, Tooltip } from '@mui/material';
 
 import { setSidebarTab, useInspectorDrawerOpen, useSelectedSidebarTab } from '../../documents/editor/EditorContext';
 import BaseSidebarPanel from './ConfigurationPanel/input-panels/helpers/BaseSidebarPanel';
@@ -30,14 +30,48 @@ export default function InspectorDrawer() {
               <p>{"{{EMAIL_ACCOUNTMANAGER}}"}</p>
               <p>{"{{EMAIL_AFZENDER}}"}</p>
               <p>{"{{NAAM_AFSPRAAK}}"}</p>
-              <p>{"{{STARTTIJD_AFSPRAAK}}"}</p>
-              <p>{"{{EINDTIJD_AFSPRAAK}}"}</p>
-              <p>{"{{DATUM_AFSPRAAK}}"}</p>
-              <p>{"{{DATUM_AFSPRAAK_WEEKDAG}}"}</p>
-              <p>{"{{DATUM_AFSPRAAK_UITGESCHREVEN}}"}</p>
-              <p>{"{{AFSPRAAK_TIJDZONE}}"}</p>
+
+              <p>
+                <Tooltip placement='left' title="HH:mm">
+                  <span>{"{{STARTTIJD_AFSPRAAK}}"}</span>
+                </Tooltip>
+              </p>
+
+              <p>
+                <Tooltip placement='left' title="HH:mm">
+                  <span>{"{{EINDTIJD_AFSPRAAK}}"}</span>
+                </Tooltip>
+              </p>
+
+              <p>
+                <Tooltip placement='left' title="DD-MM-YYYY">
+                  <span>{"{{DATUM_AFSPRAAK}}"}</span>
+                </Tooltip>
+              </p>
+
+              <p>
+                <Tooltip placement='left' title={`"maandag"`}>
+                  <span>{"{{DATUM_AFSPRAAK_WEEKDAG}}"}</span>
+                </Tooltip>
+              </p>
+
+              <p>
+                <Tooltip placement='left' title={`"maandag 3 maart"`}>
+                  <span>{"{{DATUM_AFSPRAAK_UITGESCHREVEN}}"}</span>
+                </Tooltip>
+              </p>
+
+              <p>
+                <Tooltip placement='left' title="Europe/Amsterdam">
+                  <span>{"{{AFSPRAAK_TIJDZONE}}"}</span>
+                </Tooltip>
+              </p>
+
               <p>{"{{NAAM_CAMPAGNE}}"}</p>
-              <p>{"{{NOTITIE_VOOR_IEDEREEN}}"}</p>
+
+              <Tooltip placement='left' title="Afspraak Beschrijving">
+                <span>{"{{NOTITIE_VOOR_IEDEREEN}}"}</span>
+              </Tooltip>
 
             </div>
           </BaseSidebarPanel >
