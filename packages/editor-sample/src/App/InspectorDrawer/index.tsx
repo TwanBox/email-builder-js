@@ -50,13 +50,13 @@ export default function InspectorDrawer() {
               </p>
 
               <p>
-                <Tooltip placement='left' title={`"maandag"`}>
+                <Tooltip placement='left' title="maandag">
                   <span>{"{{DATUM_AFSPRAAK_WEEKDAG}}"}</span>
                 </Tooltip>
               </p>
 
               <p>
-                <Tooltip placement='left' title={`"maandag 3 maart"`}>
+                <Tooltip placement='left' title="maandag 3 maart">
                   <span>{"{{DATUM_AFSPRAAK_UITGESCHREVEN}}"}</span>
                 </Tooltip>
               </p>
