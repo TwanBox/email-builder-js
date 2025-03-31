@@ -69,9 +69,17 @@ export default function InspectorDrawer() {
 
               <p>{"{{NAAM_CAMPAGNE}}"}</p>
 
-              <Tooltip placement='left' title="Afspraak Beschrijving">
-                <span>{"{{NOTITIE_VOOR_IEDEREEN}}"}</span>
-              </Tooltip>
+              <p>
+                <Tooltip placement='left' title="Afspraak Beschrijving">
+                  <span>{"{{NOTITIE_VOOR_IEDEREEN}}"}</span>
+                </Tooltip>
+              </p>
+
+              <p>
+                <Tooltip placement='left' title="Adres of Meeting link">
+                  <span>{"{{LOCATIE_AFSPRAAK}}"}</span>
+                </Tooltip>
+              </p>
 
             </div>
           </BaseSidebarPanel >
