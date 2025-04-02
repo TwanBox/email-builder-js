@@ -81,6 +81,10 @@ export default function InspectorDrawer() {
                 </Tooltip>
               </p>
 
+              <p>{"{{AFSPRAAK_VERPLAATS_URL}}"}</p>
+
+              <p>{"{{AFSPRAAK_ANNULEER_URL}}"}</p>
+
             </div>
           </BaseSidebarPanel >
         )
