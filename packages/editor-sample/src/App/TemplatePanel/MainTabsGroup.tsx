@@ -30,14 +30,14 @@ export default function MainTabsGroup() {
           </Tooltip>
         }
       />
-      <Tab
+      {/* <Tab
         value="preview"
         label={
           <Tooltip title="Preview e-mail">
             <PreviewOutlined fontSize="small" />
           </Tooltip>
         }
-      />
+      /> */}
       <Tab
         value="html"
         label={
@@ -46,14 +46,14 @@ export default function MainTabsGroup() {
           </Tooltip>
         }
       />
-      {/* <Tab
+      <Tab
         value="json"
         label={
-          <Tooltip title="JSON output">
+          <Tooltip title="JSON">
             <DataObjectOutlined fontSize="small" />
           </Tooltip>
         }
-      /> */}
+      />
     </Tabs>
   );
 }
