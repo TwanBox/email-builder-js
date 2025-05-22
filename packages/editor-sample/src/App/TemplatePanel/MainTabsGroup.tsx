@@ -5,6 +5,8 @@ import { Tab, Tabs, Tooltip } from '@mui/material';
 
 import { setSelectedMainTab, useSelectedMainTab } from '../../documents/editor/EditorContext';
 
+import { useIntl } from 'react-intl';
+
 export default function MainTabsGroup() {
   const selectedMainTab = useSelectedMainTab();
   const handleChange = (_: unknown, v: unknown) => {
@@ -20,12 +22,14 @@ export default function MainTabsGroup() {
     }
   };
 
+  const t = useIntl()
+
   return (
     <Tabs value={selectedMainTab} onChange={handleChange}>
       <Tab
         value="editor"
         label={
-          <Tooltip title="Bewerken">
+          <Tooltip title={t.formatMessage({ id: 'edit' })}>
             <EditOutlined fontSize="small" />
           </Tooltip>
         }

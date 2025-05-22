@@ -5,6 +5,8 @@ import ContainerPropsSchema, { ContainerProps } from '../../../../documents/bloc
 import BaseSidebarPanel from './helpers/BaseSidebarPanel';
 import MultiStylePropertyPanel from './helpers/style-inputs/MultiStylePropertyPanel';
 
+import { useIntl } from 'react-intl';
+
 type ContainerSidebarPanelProps = {
   data: ContainerProps;
   setData: (v: ContainerProps) => void;
@@ -21,8 +23,11 @@ export default function ContainerSidebarPanel({ data, setData }: ContainerSideba
       setErrors(res.error);
     }
   };
+
+  const t = useIntl()
+
   return (
-    <BaseSidebarPanel title="Container blok">
+    <BaseSidebarPanel title={t.formatMessage({ id: 'containerBlock' })}>
       <MultiStylePropertyPanel
         names={['backgroundColor', 'borderColor', 'borderRadius', 'padding']}
         value={data.style}

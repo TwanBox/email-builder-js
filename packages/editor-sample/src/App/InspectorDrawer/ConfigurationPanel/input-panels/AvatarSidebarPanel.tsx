@@ -10,6 +10,8 @@ import SliderInput from './helpers/inputs/SliderInput';
 import TextInput from './helpers/inputs/TextInput';
 import MultiStylePropertyPanel from './helpers/style-inputs/MultiStylePropertyPanel';
 
+import { useIntl } from 'react-intl';
+
 type AvatarSidebarPanelProps = {
   data: AvatarProps;
   setData: (v: AvatarProps) => void;
@@ -31,10 +33,12 @@ export default function AvatarSidebarPanel({ data, setData }: AvatarSidebarPanel
   const alt = data.props?.alt ?? AvatarPropsDefaults.alt;
   const shape = data.props?.shape ?? AvatarPropsDefaults.shape;
 
+  const t = useIntl()
+
   return (
-    <BaseSidebarPanel title="AVATAR BLOK">
+    <BaseSidebarPanel title={t.formatMessage({ id: 'avatarBlock' })}>
       <SliderInput
-        label="Grootte"
+        label={t.formatMessage({ id: 'size' })}
         iconLabel={<AspectRatioOutlined sx={{ color: 'text.secondary' }} />}
         units="px"
         step={3}
@@ -46,25 +50,25 @@ export default function AvatarSidebarPanel({ data, setData }: AvatarSidebarPanel
         }}
       />
       <RadioGroupInput
-        label="Vorm"
+        label={t.formatMessage({ id: 'shape' })}
         defaultValue={shape}
         onChange={(shape) => {
           updateData({ ...data, props: { ...data.props, shape } });
         }}
       >
-        <ToggleButton value="circle">Cirkel</ToggleButton>
-        <ToggleButton value="square">Vierkant</ToggleButton>
-        <ToggleButton value="rounded">Afgerond</ToggleButton>
+        <ToggleButton value="circle">{t.formatMessage({ id: 'circle' })}</ToggleButton>
+        <ToggleButton value="square">{t.formatMessage({ id: 'square' })}</ToggleButton>
+        <ToggleButton value="rounded">{t.formatMessage({ id: 'rounded' })}</ToggleButton>
       </RadioGroupInput>
       <TextInput
-        label="Afbeeldings-URL"
+        label={t.formatMessage({ id: 'imageURL' })}
         defaultValue={imageUrl}
         onChange={(imageUrl) => {
           updateData({ ...data, props: { ...data.props, imageUrl } });
         }}
       />
       <TextInput
-        label="Alt-tekst"
+        label={t.formatMessage({ id: 'alt' })}
         defaultValue={alt}
         onChange={(alt) => {
           updateData({ ...data, props: { ...data.props, alt } });

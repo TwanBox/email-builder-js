@@ -6,6 +6,8 @@ import BaseSidebarPanel from './helpers/BaseSidebarPanel';
 import TextInput from './helpers/inputs/TextInput';
 import MultiStylePropertyPanel from './helpers/style-inputs/MultiStylePropertyPanel';
 
+import { useIntl } from 'react-intl';
+
 type HtmlSidebarPanelProps = {
   data: HtmlProps;
   setData: (v: HtmlProps) => void;
@@ -23,10 +25,12 @@ export default function HtmlSidebarPanel({ data, setData }: HtmlSidebarPanelProp
     }
   };
 
+  const t = useIntl()
+
   return (
-    <BaseSidebarPanel title="Html blok">
+    <BaseSidebarPanel title={t.formatMessage({ id: 'htmlBlock' })}>
       <TextInput
-        label="Inhoud"
+        label={t.formatMessage({ id: 'content' })}
         rows={5}
         defaultValue={data.props?.contents ?? ''}
         onChange={(contents) => updateData({ ...data, props: { ...data.props, contents } })}

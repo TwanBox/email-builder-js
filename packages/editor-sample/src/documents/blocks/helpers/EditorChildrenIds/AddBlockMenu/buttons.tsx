@@ -20,9 +20,10 @@ type TButtonProps = {
   icon: JSX.Element;
   block: () => TEditorBlock;
 };
+
 export const BUTTONS: TButtonProps[] = [
   {
-    label: 'Koptekst',
+    label: 'heading',
     icon: <HMobiledataOutlined />,
     block: () => ({
       type: 'Heading',
@@ -35,7 +36,7 @@ export const BUTTONS: TButtonProps[] = [
     }),
   },
   {
-    label: 'Tekst',
+    label: 'text',
     icon: <NotesOutlined />,
     block: () => ({
       type: 'Text',
@@ -50,7 +51,7 @@ export const BUTTONS: TButtonProps[] = [
   },
 
   {
-    label: 'Knop',
+    label: 'button',
     icon: <SmartButtonOutlined />,
     block: () => ({
       type: 'Button',
@@ -64,7 +65,7 @@ export const BUTTONS: TButtonProps[] = [
     }),
   },
   {
-    label: 'Afbeelding',
+    label: 'image',
     icon: <ImageOutlined />,
     block: () => ({
       type: 'Image',
@@ -80,7 +81,7 @@ export const BUTTONS: TButtonProps[] = [
     }),
   },
   {
-    label: 'Avatar',
+    label: 'avatar',
     icon: <AccountCircleOutlined />,
     block: () => ({
       type: 'Avatar',
@@ -94,7 +95,7 @@ export const BUTTONS: TButtonProps[] = [
     }),
   },
   {
-    label: 'Lijn',
+    label: 'divider',
     icon: <HorizontalRuleOutlined />,
     block: () => ({
       type: 'Divider',
@@ -107,7 +108,7 @@ export const BUTTONS: TButtonProps[] = [
     }),
   },
   {
-    label: 'Spatie',
+    label: 'spacer',
     icon: <Crop32Outlined />,
     block: () => ({
       type: 'Spacer',
@@ -115,7 +116,7 @@ export const BUTTONS: TButtonProps[] = [
     }),
   },
   {
-    label: 'Html',
+    label: 'html',
     icon: <HtmlOutlined />,
     block: () => ({
       type: 'Html',
@@ -130,7 +131,7 @@ export const BUTTONS: TButtonProps[] = [
     }),
   },
   {
-    label: 'Kolommen',
+    label: 'columns',
     icon: <ViewColumnOutlined />,
     block: () => ({
       type: 'ColumnsContainer',
@@ -145,7 +146,7 @@ export const BUTTONS: TButtonProps[] = [
     }),
   },
   {
-    label: 'Container',
+    label: 'container',
     icon: <LibraryAddOutlined />,
     block: () => ({
       type: 'Container',

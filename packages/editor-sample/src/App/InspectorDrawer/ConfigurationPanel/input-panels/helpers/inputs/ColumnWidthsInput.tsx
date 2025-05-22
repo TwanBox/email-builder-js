@@ -4,6 +4,8 @@ import { Stack } from '@mui/material';
 
 import TextDimensionInput from './TextDimensionInput';
 
+import { useIntl } from 'react-intl';
+
 export const DEFAULT_2_COLUMNS = [6] as [number];
 export const DEFAULT_3_COLUMNS = [4, 8] as [number, number];
 
@@ -26,6 +28,8 @@ export default function ColumnWidthsInput({ defaultValue, onChange }: ColumnsLay
     return [null, null, null];
   });
 
+  const t = useIntl()
+
   const setIndexValue = (index: 0 | 1 | 2, value: number | null | undefined) => {
     const nValue: FixedWidths = [...currentValue];
     nValue[index] = value;
@@ -38,7 +42,7 @@ export default function ColumnWidthsInput({ defaultValue, onChange }: ColumnsLay
   if (columnsCountValue === 3) {
     column3 = (
       <TextDimensionInput
-        label="Kolom 3"
+        label={t.formatMessage({ id: 'column3' })}
         defaultValue={currentValue?.[2]}
         onChange={(v) => {
           setIndexValue(2, v);
@@ -49,14 +53,14 @@ export default function ColumnWidthsInput({ defaultValue, onChange }: ColumnsLay
   return (
     <Stack direction="row" spacing={1}>
       <TextDimensionInput
-        label="Kolom 1"
+        label={t.formatMessage({ id: 'column1' })}
         defaultValue={currentValue?.[0]}
         onChange={(v) => {
           setIndexValue(0, v);
         }}
       />
       <TextDimensionInput
-        label="Kolom 2"
+        label={t.formatMessage({ id: 'colum2' })}
         defaultValue={currentValue?.[1]}
         onChange={(v) => {
           setIndexValue(1, v);

@@ -17,6 +17,8 @@ import ImageSidebarPanel from './input-panels/ImageSidebarPanel';
 import SpacerSidebarPanel from './input-panels/SpacerSidebarPanel';
 import TextSidebarPanel from './input-panels/TextSidebarPanel';
 
+import { useIntl } from 'react-intl';
+
 function renderMessage(val: string) {
   return (
     <Box sx={{ m: 3, p: 1, border: '1px dashed', borderColor: 'divider' }}>
@@ -29,8 +31,10 @@ export default function ConfigurationPanel() {
   const document = useDocument();
   const selectedBlockId = useSelectedBlockId();
 
+  const t = useIntl()
+
   if (!selectedBlockId) {
-    return renderMessage('Selecteer een blok om deze te bewerken.');
+    return renderMessage(t.formatMessage({ id: 'selectABlock' }));
   }
   const block = document[selectedBlockId];
   if (!block) {

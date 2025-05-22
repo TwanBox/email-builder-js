@@ -11,6 +11,8 @@ import PaddingInput from '../inputs/PaddingInput';
 import SliderInput from '../inputs/SliderInput';
 import TextAlignInput from '../inputs/TextAlignInput';
 
+import { useIntl } from 'react-intl';
+
 type StylePropertyPanelProps = {
   name: keyof TStyle;
   value: TStyle;
@@ -23,11 +25,13 @@ export default function SingleStylePropertyPanel({ name, value, onChange }: Styl
     onChange({ ...value, [name]: v });
   };
 
+  const t = useIntl()
+
   switch (name) {
     case 'backgroundColor':
-      return <NullableColorInput label="Achtergrondkleur" defaultValue={defaultValue} onChange={handleChange} />;
+      return <NullableColorInput label={t.formatMessage({ id: 'backgroundColor' })} defaultValue={defaultValue} onChange={handleChange} />;
     case 'borderColor':
-      return <NullableColorInput label="Randkleur" defaultValue={defaultValue} onChange={handleChange} />;
+      return <NullableColorInput label={t.formatMessage({ id: 'borderColor' })} defaultValue={defaultValue} onChange={handleChange} />;
     case 'borderRadius':
       return (
         <SliderInput
@@ -37,22 +41,22 @@ export default function SingleStylePropertyPanel({ name, value, onChange }: Styl
           marks
           min={0}
           max={48}
-          label="Randradius"
+          label={t.formatMessage({ id: 'borderRadius' })}
           defaultValue={defaultValue}
           onChange={handleChange}
         />
       );
     case 'color':
-      return <NullableColorInput label="Tekstkleur" defaultValue={defaultValue} onChange={handleChange} />;
+      return <NullableColorInput label={t.formatMessage({ id: 'textColor' })} defaultValue={defaultValue} onChange={handleChange} />;
     case 'fontFamily':
-      return <NullableFontFamily label="Lettertype" defaultValue={defaultValue} onChange={handleChange} />;
+      return <NullableFontFamily label={t.formatMessage({ id: 'fontFamily' })} defaultValue={defaultValue} onChange={handleChange} />;
     case 'fontSize':
-      return <FontSizeInput label="Lettergrootte" defaultValue={defaultValue} onChange={handleChange} />;
+      return <FontSizeInput label={t.formatMessage({ id: 'fontSize' })} defaultValue={defaultValue} onChange={handleChange} />;
     case 'fontWeight':
-      return <FontWeightInput label="Lettergewicht" defaultValue={defaultValue} onChange={handleChange} />;
+      return <FontWeightInput label={t.formatMessage({ id: 'fontWeight' })} defaultValue={defaultValue} onChange={handleChange} />;
     case 'textAlign':
-      return <TextAlignInput label="Uitlijning" defaultValue={defaultValue} onChange={handleChange} />;
+      return <TextAlignInput label={t.formatMessage({ id: 'alignment' })} defaultValue={defaultValue} onChange={handleChange} />;
     case 'padding':
-      return <PaddingInput label="Padding" defaultValue={defaultValue} onChange={handleChange} />;
+      return <PaddingInput label={t.formatMessage({ id: 'padding' })} defaultValue={defaultValue} onChange={handleChange} />;
   }
 }

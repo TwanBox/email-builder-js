@@ -6,6 +6,7 @@ import { TEditorBlock } from '../../../../editor/core';
 
 import BlockButton from './BlockButton';
 import { BUTTONS } from './buttons';
+import { useIntl } from 'react-intl';
 
 type BlocksMenuProps = {
   anchorEl: HTMLElement | null;
@@ -26,6 +27,8 @@ export default function BlocksMenu({ anchorEl, setAnchorEl, onSelect }: BlocksMe
     return null;
   }
 
+  const t = useIntl()
+
   return (
     <Menu
       open
@@ -36,7 +39,7 @@ export default function BlocksMenu({ anchorEl, setAnchorEl, onSelect }: BlocksMe
     >
       <Box sx={{ p: 1, display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr' }}>
         {BUTTONS.map((k, i) => (
-          <BlockButton key={i} label={k.label} icon={k.icon} onClick={() => onClick(k.block())} />
+          <BlockButton key={i} label={t.formatMessage({ id: k.label })} icon={k.icon} onClick={() => onClick(k.block())} />
         ))}
       </Box>
     </Menu>

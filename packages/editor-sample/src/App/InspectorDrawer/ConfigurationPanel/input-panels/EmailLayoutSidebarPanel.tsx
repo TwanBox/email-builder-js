@@ -11,6 +11,8 @@ import ColorInput, { NullableColorInput } from './helpers/inputs/ColorInput';
 import { NullableFontFamily } from './helpers/inputs/FontFamily';
 import SliderInput from './helpers/inputs/SliderInput';
 
+import { useIntl } from 'react-intl';
+
 type EmailLayoutSidebarFieldsProps = {
   data: EmailLayoutProps;
   setData: (v: EmailLayoutProps) => void;
@@ -28,20 +30,22 @@ export default function EmailLayoutSidebarFields({ data, setData }: EmailLayoutS
     }
   };
 
+  const t = useIntl()
+
   return (
-    <BaseSidebarPanel title="Globaal">
+    <BaseSidebarPanel title={t.formatMessage({ id: 'global' })}>
       <ColorInput
-        label="Achtergrondkleur"
+        label={t.formatMessage({ id: 'backdropColor' })}
         defaultValue={data.backdropColor ?? '#F5F5F5'}
         onChange={(backdropColor) => updateData({ ...data, backdropColor })}
       />
       <ColorInput
-        label="Canvaskleur"
+        label={t.formatMessage({ id: 'canvasColor' })}
         defaultValue={data.canvasColor ?? '#FFFFFF'}
         onChange={(canvasColor) => updateData({ ...data, canvasColor })}
       />
       <NullableColorInput
-        label="Canvasrandkleur"
+        label={t.formatMessage({ id: 'canvasBorderColor' })}
         defaultValue={data.borderColor ?? null}
         onChange={(borderColor) => updateData({ ...data, borderColor })}
       />
@@ -52,17 +56,17 @@ export default function EmailLayoutSidebarFields({ data, setData }: EmailLayoutS
         marks
         min={0}
         max={48}
-        label="Canvasrandradius"
+        label={t.formatMessage({ id: 'canvasBorderRadius' })}
         defaultValue={data.borderRadius ?? 0}
         onChange={(borderRadius) => updateData({ ...data, borderRadius })}
       />
       <NullableFontFamily
-        label="Lettertype"
+        label={t.formatMessage({ id: 'fontFamily' })}
         defaultValue="MODERN_SANS"
         onChange={(fontFamily) => updateData({ ...data, fontFamily })}
       />
       <ColorInput
-        label="Tekstkleur"
+        label={t.formatMessage({ id: 'textColor' })}
         defaultValue={data.textColor ?? '#262626'}
         onChange={(textColor) => updateData({ ...data, textColor })}
       />

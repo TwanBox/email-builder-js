@@ -6,6 +6,7 @@ import { IconButton, Paper, Stack, SxProps, Tooltip } from '@mui/material';
 import { TEditorBlock } from '../../../editor/core';
 import { resetDocument, setSelectedBlockId, useDocument } from '../../../editor/EditorContext';
 import { ColumnsContainerProps } from '../../ColumnsContainer/ColumnsContainerPropsSchema';
+import { useIntl } from 'react-intl';
 
 const sx: SxProps = {
   position: 'absolute',
@@ -22,6 +23,7 @@ type Props = {
 };
 export default function TuneMenu({ blockId }: Props) {
   const document = useDocument();
+  const t = useIntl()
 
   const handleDeleteClick = () => {
     const filterChildrenIds = (childrenIds: string[] | null | undefined) => {
@@ -151,17 +153,17 @@ export default function TuneMenu({ blockId }: Props) {
   return (
     <Paper sx={sx} onClick={(ev) => ev.stopPropagation()}>
       <Stack>
-        <Tooltip title="Omhoog verplaatsen" placement="left-start">
+        <Tooltip title={t.formatMessage({ id: 'moveUp' })} placement="left-start">
           <IconButton onClick={() => handleMoveClick('up')} sx={{ color: 'text.primary' }}>
             <ArrowUpwardOutlined fontSize="small" />
           </IconButton>
         </Tooltip>
-        <Tooltip title="Omlaag verplaatsen" placement="left-start">
+        <Tooltip title={t.formatMessage({ id: 'moveDown' })} placement="left-start">
           <IconButton onClick={() => handleMoveClick('down')} sx={{ color: 'text.primary' }}>
             <ArrowDownwardOutlined fontSize="small" />
           </IconButton>
         </Tooltip>
-        <Tooltip title="Verwijderen" placement="left-start">
+        <Tooltip title={t.formatMessage({ id: 'delete' })} placement="left-start">
           <IconButton onClick={handleDeleteClick} sx={{ color: 'text.primary' }}>
             <DeleteOutlined fontSize="small" />
           </IconButton>

@@ -8,11 +8,14 @@ import BaseSidebarPanel from './ConfigurationPanel/input-panels/helpers/BaseSide
 import ConfigurationPanel from './ConfigurationPanel';
 import StylesPanel from './StylesPanel';
 
+import { useIntl } from 'react-intl';
+
 export const INSPECTOR_DRAWER_WIDTH = 320;
 
 export default function InspectorDrawer() {
   const selectedSidebarTab = useSelectedSidebarTab();
   const inspectorDrawerOpen = useInspectorDrawerOpen();
+  const t = useIntl()
 
   const renderCurrentSidebarPanel = () => {
     switch (selectedSidebarTab) {
@@ -22,7 +25,7 @@ export default function InspectorDrawer() {
         return <StylesPanel />;
       case 'default-variables':
         return (
-          <BaseSidebarPanel title='Standaard variabelen'>
+          <BaseSidebarPanel title={t.formatMessage({ id: 'standardVariables' })}>
             <div>
               <p>{"{{NAAM_PROSPECT}}"}</p>
               <p>{"{{EMAIL_PROSPECT}}"}</p>
@@ -103,9 +106,9 @@ export default function InspectorDrawer() {
       <Box sx={{ width: INSPECTOR_DRAWER_WIDTH, height: 49, borderBottom: 1, borderColor: 'divider' }}>
         <Box px={2}>
           <Tabs value={selectedSidebarTab} onChange={(_, v) => setSidebarTab(v)}>
-            <Tab value="styles" label="Opmaak" />
-            <Tab value="block-configuration" label="Bewerken" />
-            <Tab value="default-variables" label="Variabelen" />
+            <Tab value="styles" label={t.formatMessage({ id: 'styles' })} />
+            <Tab value="block-configuration" label={t.formatMessage({ id: 'edit' })} />
+            <Tab value="default-variables" label={t.formatMessage({ id: 'variables' })} />
           </Tabs>
         </Box>
       </Box>

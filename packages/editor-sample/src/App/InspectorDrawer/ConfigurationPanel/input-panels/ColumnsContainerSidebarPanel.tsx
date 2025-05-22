@@ -18,6 +18,8 @@ import RadioGroupInput from './helpers/inputs/RadioGroupInput';
 import SliderInput from './helpers/inputs/SliderInput';
 import MultiStylePropertyPanel from './helpers/style-inputs/MultiStylePropertyPanel';
 
+import { useIntl } from 'react-intl';
+
 type ColumnsContainerPanelProps = {
   data: ColumnsContainerProps;
   setData: (v: ColumnsContainerProps) => void;
@@ -34,10 +36,12 @@ export default function ColumnsContainerPanel({ data, setData }: ColumnsContaine
     }
   };
 
+  const t = useIntl()
+
   return (
-    <BaseSidebarPanel title="KOLOMMEN blok">
+    <BaseSidebarPanel title={t.formatMessage({ id: 'columnsBlock' })}>
       <RadioGroupInput
-        label="Aantal kolommen"
+        label={t.formatMessage({ id: 'numberOfColumns' })}
         defaultValue={data.props?.columnsCount === 2 ? '2' : '3'}
         onChange={(v) => {
           updateData({ ...data, props: { ...data.props, columnsCount: v === '2' ? 2 : 3 } });
@@ -53,7 +57,7 @@ export default function ColumnsContainerPanel({ data, setData }: ColumnsContaine
         }}
       />
       <SliderInput
-        label="Kolomafstand"
+        label={t.formatMessage({ id: 'columnsGap' })}
         iconLabel={<SpaceBarOutlined sx={{ color: 'text.secondary' }} />}
         units="px"
         step={4}
@@ -64,7 +68,7 @@ export default function ColumnsContainerPanel({ data, setData }: ColumnsContaine
         onChange={(columnsGap) => updateData({ ...data, props: { ...data.props, columnsGap } })}
       />
       <RadioGroupInput
-        label="Uitlijning"
+        label={t.formatMessage({ id: 'alignment' })}
         defaultValue={data.props?.contentAlignment ?? 'middle'}
         onChange={(contentAlignment) => {
           updateData({ ...data, props: { ...data.props, contentAlignment } });

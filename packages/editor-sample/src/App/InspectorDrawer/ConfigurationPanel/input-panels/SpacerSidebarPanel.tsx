@@ -6,6 +6,8 @@ import { SpacerProps, SpacerPropsDefaults, SpacerPropsSchema } from '@usewaypoin
 import BaseSidebarPanel from './helpers/BaseSidebarPanel';
 import SliderInput from './helpers/inputs/SliderInput';
 
+import { useIntl } from 'react-intl';
+
 type SpacerSidebarPanelProps = {
   data: SpacerProps;
   setData: (v: SpacerProps) => void;
@@ -23,10 +25,12 @@ export default function SpacerSidebarPanel({ data, setData }: SpacerSidebarPanel
     }
   };
 
+  const t = useIntl()
+
   return (
-    <BaseSidebarPanel title="Spatie blok">
+    <BaseSidebarPanel title={t.formatMessage({ id: 'spacerBlock' })}>
       <SliderInput
-        label="Afstand"
+        label={t.formatMessage({ id: 'distance' })}
         iconLabel={<HeightOutlined sx={{ color: 'text.secondary' }} />}
         units="px"
         step={4}

@@ -9,6 +9,8 @@ import RadioGroupInput from './helpers/inputs/RadioGroupInput';
 import TextInput from './helpers/inputs/TextInput';
 import MultiStylePropertyPanel from './helpers/style-inputs/MultiStylePropertyPanel';
 
+import { useIntl } from 'react-intl';
+
 type ButtonSidebarPanelProps = {
   data: ButtonProps;
   setData: (v: ButtonProps) => void;
@@ -26,6 +28,8 @@ export default function ButtonSidebarPanel({ data, setData }: ButtonSidebarPanel
     }
   };
 
+  const t = useIntl()
+
   const text = data.props?.text ?? ButtonPropsDefaults.text;
   const url = data.props?.url ?? ButtonPropsDefaults.url;
   const fullWidth = data.props?.fullWidth ?? ButtonPropsDefaults.fullWidth;
@@ -35,9 +39,9 @@ export default function ButtonSidebarPanel({ data, setData }: ButtonSidebarPanel
   const buttonBackgroundColor = data.props?.buttonBackgroundColor ?? ButtonPropsDefaults.buttonBackgroundColor;
 
   return (
-    <BaseSidebarPanel title="KNOP BLOK">
+    <BaseSidebarPanel title={t.formatMessage({ id: 'buttonBlock' })}>
       <TextInput
-        label="Tekst"
+        label={t.formatMessage({ id: 'text' })}
         defaultValue={text}
         onChange={(text) => updateData({ ...data, props: { ...data.props, text } })}
       />
@@ -47,15 +51,15 @@ export default function ButtonSidebarPanel({ data, setData }: ButtonSidebarPanel
         onChange={(url) => updateData({ ...data, props: { ...data.props, url } })}
       />
       <RadioGroupInput
-        label="Breedte"
+        label={t.formatMessage({ id: 'width' })}
         defaultValue={fullWidth ? 'FULL_WIDTH' : 'AUTO'}
         onChange={(v) => updateData({ ...data, props: { ...data.props, fullWidth: v === 'FULL_WIDTH' } })}
       >
-        <ToggleButton value="FULL_WIDTH">Volledig</ToggleButton>
-        <ToggleButton value="AUTO">Automatisch</ToggleButton>
+        <ToggleButton value="FULL_WIDTH">{t.formatMessage({ id: 'full' })}</ToggleButton>
+        <ToggleButton value="AUTO">{t.formatMessage({ id: 'auto' })}</ToggleButton>
       </RadioGroupInput>
       <RadioGroupInput
-        label="Grootte"
+        label={t.formatMessage({ id: 'size' })}
         defaultValue={size}
         onChange={(size) => updateData({ ...data, props: { ...data.props, size } })}
       >
@@ -65,21 +69,21 @@ export default function ButtonSidebarPanel({ data, setData }: ButtonSidebarPanel
         <ToggleButton value="large">Lg</ToggleButton>
       </RadioGroupInput>
       <RadioGroupInput
-        label="Stijl"
+        label={t.formatMessage({ id: 'style' })}
         defaultValue={buttonStyle}
         onChange={(buttonStyle) => updateData({ ...data, props: { ...data.props, buttonStyle } })}
       >
-        <ToggleButton value="rectangle">Rechthoek</ToggleButton>
-        <ToggleButton value="rounded">Afgerond</ToggleButton>
-        <ToggleButton value="pill">Pil</ToggleButton>
+        <ToggleButton value="rectangle">{t.formatMessage({ id: 'rectangle' })}</ToggleButton>
+        <ToggleButton value="rounded">{t.formatMessage({ id: 'rounded' })}</ToggleButton>
+        <ToggleButton value="pill">{t.formatMessage({ id: 'pill' })}</ToggleButton>
       </RadioGroupInput>
       <ColorInput
-        label="Tekstkleur"
+        label={t.formatMessage({ id: 'textColor' })}
         defaultValue={buttonTextColor}
         onChange={(buttonTextColor) => updateData({ ...data, props: { ...data.props, buttonTextColor } })}
       />
       <ColorInput
-        label="Knopkleur"
+        label={t.formatMessage({ id: 'buttonColor' })}
         defaultValue={buttonBackgroundColor}
         onChange={(buttonBackgroundColor) => updateData({ ...data, props: { ...data.props, buttonBackgroundColor } })}
       />

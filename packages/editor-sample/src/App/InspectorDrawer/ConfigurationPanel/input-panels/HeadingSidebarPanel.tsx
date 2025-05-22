@@ -8,6 +8,8 @@ import RadioGroupInput from './helpers/inputs/RadioGroupInput';
 import TextInput from './helpers/inputs/TextInput';
 import MultiStylePropertyPanel from './helpers/style-inputs/MultiStylePropertyPanel';
 
+import { useIntl } from 'react-intl';
+
 type HeadingSidebarPanelProps = {
   data: HeadingProps;
   setData: (v: HeadingProps) => void;
@@ -25,10 +27,12 @@ export default function HeadingSidebarPanel({ data, setData }: HeadingSidebarPan
     }
   };
 
+  const t = useIntl()
+
   return (
-    <BaseSidebarPanel title="KOPTEKST BLOK">
+    <BaseSidebarPanel title={t.formatMessage({ id: 'headingBlock' })}>
       <TextInput
-        label="Inhoud"
+        label={t.formatMessage({ id: 'content' })}
         rows={3}
         defaultValue={data.props?.text ?? HeadingPropsDefaults.text}
         onChange={(text) => {
@@ -36,7 +40,7 @@ export default function HeadingSidebarPanel({ data, setData }: HeadingSidebarPan
         }}
       />
       <RadioGroupInput
-        label="Niveau"
+        label={t.formatMessage({ id: 'level' })}
         defaultValue={data.props?.level ?? HeadingPropsDefaults.level}
         onChange={(level) => {
           updateData({ ...data, props: { ...data.props, level } });

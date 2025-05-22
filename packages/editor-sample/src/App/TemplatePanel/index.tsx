@@ -14,6 +14,8 @@ import {
 import ToggleInspectorPanelButton from '../InspectorDrawer/ToggleInspectorPanelButton';
 import ToggleSamplesPanelButton from '../SamplesDrawer/ToggleSamplesPanelButton';
 
+import { useIntl } from 'react-intl';
+
 import DownloadJson from './DownloadJson';
 import HtmlPanel from './HtmlPanel';
 import ImportJson from './ImportJson';
@@ -28,6 +30,7 @@ export default function TemplatePanel() {
   const document = useDocument();
   const selectedMainTab = useSelectedMainTab();
   const selectedScreenSize = useSelectedScreenSize();
+  const t = useIntl()
 
   React.useEffect(() => {
     const handleMessage = (event: any) => {
@@ -131,12 +134,12 @@ export default function TemplatePanel() {
             <ImportJson />
             <ToggleButtonGroup value={selectedScreenSize} exclusive size="small" onChange={handleScreenSizeChange}>
               <ToggleButton value="desktop">
-                <Tooltip title="Desktop weergave">
+                <Tooltip title={t.formatMessage({ id: 'desktopView' })}>
                   <MonitorOutlined fontSize="small" />
                 </Tooltip>
               </ToggleButton>
               <ToggleButton value="mobile">
-                <Tooltip title="Mobiele weergave">
+                <Tooltip title={t.formatMessage({ id: 'mobileView' })}>
                   <PhoneIphoneOutlined fontSize="small" />
                 </Tooltip>
               </ToggleButton>

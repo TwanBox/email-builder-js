@@ -4,6 +4,8 @@ import { MenuItem, TextField } from '@mui/material';
 
 import { FONT_FAMILIES } from '../../../../../../documents/blocks/helpers/fontFamily';
 
+import { useIntl } from 'react-intl';
+
 const OPTIONS = FONT_FAMILIES.map((option) => (
   <MenuItem key={option.key} value={option.key} sx={{ fontFamily: option.value }}>
     {option.label}
@@ -17,6 +19,8 @@ type NullableProps = {
 };
 export function NullableFontFamily({ label, onChange, defaultValue }: NullableProps) {
   const [value, setValue] = useState(defaultValue ?? 'inherit');
+  const t = useIntl()
+
   return (
     <TextField
       select
@@ -29,7 +33,7 @@ export function NullableFontFamily({ label, onChange, defaultValue }: NullablePr
         onChange(v === null ? null : v);
       }}
     >
-      <MenuItem value="inherit">E-mailinstellingen overnemen</MenuItem>
+      <MenuItem value="inherit">{t.formatMessage({ id: 'inherit' })}</MenuItem>
       {OPTIONS}
     </TextField>
   );
