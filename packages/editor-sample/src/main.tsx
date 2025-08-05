@@ -9,6 +9,7 @@ import theme from './theme';
 
 import en from '../src/locales/en.json';
 import nl from '../src/locales/nl.json';
+import fr from '../src/locales/fr.json';
 
 const params = new URLSearchParams(window.location.search);
 const locale = params.get('locale');
@@ -16,14 +17,15 @@ const locale = params.get('locale');
 // Choose messages based on locale
 const messages = {
   en,
-  nl
-}[locale as 'en' | 'nl'] || nl;
+  nl,
+  fr
+}[locale as 'en' | 'nl' | 'fr'] || en;
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <IntlProvider locale={locale || 'nl'} messages={messages}>
+      <IntlProvider locale={locale || 'en'} messages={messages}>
         <App />
       </IntlProvider>
     </ThemeProvider>
