@@ -75,5 +75,9 @@
   "columnsGap": "Columns gap",
   "moveUp": "Move up",
   "moveDown": "Move down",
-  "delete": "Delete"
+  "delete": "Delete",
+
+  "sending": "Sending",
+  "textOnlyLabel": "Text only",
+  "textOnlyDescription": "Email will be sent as plain text (no HTML)"
 }

@@ -10,6 +10,7 @@ import {
   useDocument,
   useSelectedMainTab,
   useSelectedScreenSize,
+  useTextOnly,
 } from '../../documents/editor/EditorContext';
 import ToggleInspectorPanelButton from '../InspectorDrawer/ToggleInspectorPanelButton';
 import ToggleSamplesPanelButton from '../SamplesDrawer/ToggleSamplesPanelButton';
@@ -22,6 +23,7 @@ import ImportJson from './ImportJson';
 import JsonPanel from './JsonPanel';
 import MainTabsGroup from './MainTabsGroup';
 import ShareButton from './ShareButton';
+import TextOnlyEditor from './TextOnlyEditor';
 
 import validateJsonStringValue from './ImportJson/validateJsonStringValue';
 import { resetDocument } from '../../documents/editor/EditorContext';
@@ -30,6 +32,7 @@ export default function TemplatePanel() {
   const document = useDocument();
   const selectedMainTab = useSelectedMainTab();
   const selectedScreenSize = useSelectedScreenSize();
+  const textOnly = useTextOnly();
   const t = useIntl()
 
   React.useEffect(() => {
@@ -87,6 +90,11 @@ export default function TemplatePanel() {
   };
 
   const renderMainPanel = () => {
+    // When text-only mode is active, replace the editor/preview with the plain-text preview
+    if (textOnly && (selectedMainTab === 'editor' || selectedMainTab === 'preview')) {
+      return <TextOnlyEditor />;
+    }
+
     switch (selectedMainTab) {
       case 'editor':
         return (

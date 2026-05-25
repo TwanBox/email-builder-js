@@ -1,6 +1,9 @@
 import { create } from 'zustand';
 
+import { renderToStaticMarkup } from '@usewaypoint/email-builder';
+
 import getConfiguration from '../../getConfiguration';
+import { stripHtmlToText } from '../../utils/stripHtmlToText';
 
 import { TEditorConfiguration } from './core';
 
@@ -14,6 +17,9 @@ type TValue = {
 
   inspectorDrawerOpen: boolean;
   samplesDrawerOpen: boolean;
+
+  textOnly: boolean;
+  textBody: string;
 };
 
 const editorStateStore = create<TValue>(() => ({
@@ -25,7 +31,23 @@ const editorStateStore = create<TValue>(() => ({
 
   inspectorDrawerOpen: true,
   samplesDrawerOpen: true,
+
+  textOnly: false,
+  textBody: '',
 }));
+
+// Listen for LOAD_TEMPLATE messages from the parent window
+window.addEventListener('message', (event: MessageEvent) => {
+  if (event.data?.type === 'LOAD_TEMPLATE') {
+    const { textOnly, textBody } = event.data.payload ?? {};
+    if (typeof textOnly === 'boolean') {
+      editorStateStore.setState({ textOnly });
+    }
+    if (typeof textBody === 'string') {
+      editorStateStore.setState({ textBody });
+    }
+  }
+});
 
 export function useDocument() {
   return editorStateStore((s) => s.document);
@@ -95,18 +117,68 @@ export function setDocument(document: TValue['document']) {
   });
 
   const newConfig = editorStateStore.getState().document;
+  const { textOnly, textBody } = editorStateStore.getState();
 
   if (window.parent) {
     window.parent.postMessage(
       {
         type: "CONFIG_UPDATED",
-        payload: newConfig
+        payload: { document: newConfig, textOnly, textBody }
       },
       "*"
     );
   }
 
   return newConfig;
+}
+
+export function useTextOnly() {
+  return editorStateStore((s) => s.textOnly);
+}
+
+export function useTextBody() {
+  return editorStateStore((s) => s.textBody);
+}
+
+export function setTextOnlyAndNotify(textOnly: boolean) {
+  const state = editorStateStore.getState();
+
+  // Auto-populate textBody from the rendered HTML when enabling text-only for the first time
+  let textBody = state.textBody;
+  if (textOnly && !textBody) {
+    const html = renderToStaticMarkup(state.document, { rootBlockId: 'root' });
+    textBody = stripHtmlToText(html);
+  }
+
+  editorStateStore.setState({ textOnly, textBody });
+
+  const document = editorStateStore.getState().document;
+
+  if (window.parent) {
+    window.parent.postMessage(
+      {
+        type: "CONFIG_UPDATED",
+        payload: { document, textOnly, textBody }
+      },
+      "*"
+    );
+  }
+}
+
+export function setTextBodyAndNotify(textBody: string) {
+  editorStateStore.setState({ textBody });
+
+  const { document, textOnly } = editorStateStore.getState();
+
+  if (window.parent) {
+    window.parent.postMessage(
+      {
+        type: "CONFIG_UPDATED",
+        payload: { document, textOnly, textBody }
+      },
+      "*"
+    );
+  }
 }
 
 export function toggleInspectorDrawerOpen() {

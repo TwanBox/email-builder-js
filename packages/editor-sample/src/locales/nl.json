@@ -75,5 +75,9 @@
   "columnsGap": "Kolomafstand",
   "moveUp": "Omhoog verplaatsen",
   "moveDown": "Omlaag verplaatsen",
-  "delete": "Verwijderen"
+  "delete": "Verwijderen",
+
+  "sending": "Verzenden",
+  "textOnlyLabel": "Alleen tekst",
+  "textOnlyDescription": "Mail wordt verzonden als platte tekst (geen HTML)"
 }

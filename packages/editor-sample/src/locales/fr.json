@@ -71,5 +71,9 @@
   "columnsGap": "Espacement des colonnes",
   "moveUp": "Déplacer vers le haut",
   "moveDown": "Déplacer vers le bas",
-  "delete": "Supprimer"
+  "delete": "Supprimer",
+
+  "sending": "Envoi",
+  "textOnlyLabel": "Texte uniquement",
+  "textOnlyDescription": "L'e-mail sera envoyé en texte brut (sans HTML)"
 }
