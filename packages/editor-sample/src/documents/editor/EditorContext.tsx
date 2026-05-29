@@ -36,10 +36,20 @@ const editorStateStore = create<TValue>(() => ({
   textBody: '',
 }));
 
-// Listen for LOAD_TEMPLATE messages from the parent window
+// Listen for LOAD_TEMPLATE messages from the parent window.
+// Registered at module-eval (before React mounts) so it fires even when
+// the parent sends the message synchronously after iframe load.
 window.addEventListener('message', (event: MessageEvent) => {
   if (event.data?.type === 'LOAD_TEMPLATE') {
-    const { textOnly, textBody } = event.data.payload ?? {};
+    const { config, textOnly, textBody } = event.data.payload ?? {};
+
+    if (config && typeof config === 'object' && config.root) {
+      editorStateStore.setState({
+        document: config as TEditorConfiguration,
+        selectedBlockId: null,
+        selectedSidebarTab: 'styles',
+      });
+    }
     if (typeof textOnly === 'boolean') {
       editorStateStore.setState({ textOnly });
     }
@@ -48,6 +58,12 @@ window.addEventListener('message', (event: MessageEvent) => {
     }
   }
 });
+
+// Tell the parent we're ready so it can push LOAD_TEMPLATE without racing
+// the iframe `load` event.
+if (window.parent && window.parent !== window) {
+  window.parent.postMessage({ type: 'BUILDER_READY' }, '*');
+}
 
 export function useDocument() {
   return editorStateStore((s) => s.document);
