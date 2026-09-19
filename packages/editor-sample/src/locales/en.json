@@ -79,5 +79,7 @@
 
   "sending": "Sending",
   "textOnlyLabel": "Text only",
-  "textOnlyDescription": "Email will be sent as plain text (no HTML)"
+  "textOnlyDescription": "Email will be sent as plain text (no HTML)",
+
+  "customColour": "Custom colour"
 }

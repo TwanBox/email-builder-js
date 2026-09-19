@@ -4,6 +4,8 @@ import { AspectRatioOutlined } from '@mui/icons-material';
 import { ToggleButton } from '@mui/material';
 import { AvatarProps, AvatarPropsDefaults, AvatarPropsSchema } from '@usewaypoint/block-avatar';
 
+import { safeParseWithBrandTokens } from '../../../../documents/editor/brandTokens';
+
 import BaseSidebarPanel from './helpers/BaseSidebarPanel';
 import RadioGroupInput from './helpers/inputs/RadioGroupInput';
 import SliderInput from './helpers/inputs/SliderInput';
@@ -19,7 +21,7 @@ type AvatarSidebarPanelProps = {
 export default function AvatarSidebarPanel({ data, setData }: AvatarSidebarPanelProps) {
   const [, setErrors] = useState<Zod.ZodError | null>(null);
   const updateData = (d: unknown) => {
-    const res = AvatarPropsSchema.safeParse(d);
+    const res = safeParseWithBrandTokens(AvatarPropsSchema, d);
     if (res.success) {
       setData(res.data);
       setErrors(null);

@@ -71,7 +71,7 @@ export const BUTTONS: TButtonProps[] = [
       type: 'Image',
       data: {
         props: {
-          url: 'https://fakeimg.pl/600x400',
+          url: null,
           alt: 'Voorbeeld afbeelding',
           contentAlignment: 'middle',
           linkHref: null,

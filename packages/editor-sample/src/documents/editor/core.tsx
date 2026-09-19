@@ -15,6 +15,8 @@ import {
   buildBlockConfigurationSchema,
 } from '@usewaypoint/document-core';
 
+import { LOGO_PLACEHOLDER_URL } from './brandTokens';
+
 import ColumnsContainerEditor from '../blocks/ColumnsContainer/ColumnsContainerEditor';
 import ColumnsContainerPropsSchema from '../blocks/ColumnsContainer/ColumnsContainerPropsSchema';
 import ContainerEditor from '../blocks/Container/ContainerEditor';
@@ -79,7 +81,8 @@ const EDITOR_DICTIONARY = buildBlockConfigurationDictionary({
         ...data,
         props: {
           ...data.props,
-          url: data.props?.url ?? 'https://placehold.co/600x400@2x/F8F8F8/CCC?text=Your%20image',
+          // Empty URL shows the same placeholder the backend puts in a sent mail.
+          url: data.props?.url ?? LOGO_PLACEHOLDER_URL,
         },
       };
       return (

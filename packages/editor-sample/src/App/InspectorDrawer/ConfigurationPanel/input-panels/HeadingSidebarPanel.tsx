@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { ToggleButton } from '@mui/material';
 import { HeadingProps, HeadingPropsDefaults, HeadingPropsSchema } from '@usewaypoint/block-heading';
 
+import { safeParseWithBrandTokens } from '../../../../documents/editor/brandTokens';
+
 import BaseSidebarPanel from './helpers/BaseSidebarPanel';
 import RadioGroupInput from './helpers/inputs/RadioGroupInput';
 import TextInput from './helpers/inputs/TextInput';
@@ -18,7 +20,7 @@ export default function HeadingSidebarPanel({ data, setData }: HeadingSidebarPan
   const [, setErrors] = useState<Zod.ZodError | null>(null);
 
   const updateData = (d: unknown) => {
-    const res = HeadingPropsSchema.safeParse(d);
+    const res = safeParseWithBrandTokens(HeadingPropsSchema, d);
     if (res.success) {
       setData(res.data);
       setErrors(null);

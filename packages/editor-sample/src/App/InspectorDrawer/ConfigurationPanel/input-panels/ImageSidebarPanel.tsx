@@ -8,7 +8,10 @@ import {
 import { Stack, ToggleButton } from '@mui/material';
 import { ImageProps, ImagePropsSchema } from '@usewaypoint/block-image';
 
+import { safeParseWithBrandTokens } from '../../../../documents/editor/brandTokens';
+
 import BaseSidebarPanel from './helpers/BaseSidebarPanel';
+import ImageUrlInput from './helpers/inputs/ImageUrlInput';
 import RadioGroupInput from './helpers/inputs/RadioGroupInput';
 import TextDimensionInput from './helpers/inputs/TextDimensionInput';
 import TextInput from './helpers/inputs/TextInput';
@@ -24,7 +27,7 @@ export default function ImageSidebarPanel({ data, setData }: ImageSidebarPanelPr
   const [, setErrors] = useState<Zod.ZodError | null>(null);
 
   const updateData = (d: unknown) => {
-    const res = ImagePropsSchema.safeParse(d);
+    const res = safeParseWithBrandTokens(ImagePropsSchema, d);
     if (res.success) {
       setData(res.data);
       setErrors(null);
@@ -37,7 +40,7 @@ export default function ImageSidebarPanel({ data, setData }: ImageSidebarPanelPr
 
   return (
     <BaseSidebarPanel title={t.formatMessage({ id: 'imageBlock' })}>
-      <TextInput
+      <ImageUrlInput
         label="Web-URL (https)"
         defaultValue={data.props?.url ?? ''}
         onChange={(v) => {
@@ -90,6 +93,7 @@ export default function ImageSidebarPanel({ data, setData }: ImageSidebarPanelPr
 
       <MultiStylePropertyPanel
         names={['backgroundColor', 'textAlign', 'padding']}
+        brandBackgroundColor
         value={data.style}
         onChange={(style) => updateData({ ...data, style })}
       />

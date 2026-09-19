@@ -1,3 +1,4 @@
+import { safeParseWithBrandTokens } from '../../../documents/editor/brandTokens';
 import { EditorConfigurationSchema, TEditorConfiguration } from '../../../documents/editor/core';
 
 type TResult = { error: string; data?: undefined } | { data: TEditorConfiguration; error?: undefined };
@@ -10,7 +11,7 @@ export default function validateTextAreaValue(value: string): TResult {
     return { error: 'Invalid json' };
   }
 
-  const parseResult = EditorConfigurationSchema.safeParse(jsonObject);
+  const parseResult = safeParseWithBrandTokens(EditorConfigurationSchema, jsonObject);
   if (!parseResult.success) {
     return { error: 'Invalid JSON schema' };
   }

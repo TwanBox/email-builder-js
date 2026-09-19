@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { HeightOutlined } from '@mui/icons-material';
 import { DividerProps, DividerPropsDefaults, DividerPropsSchema } from '@usewaypoint/block-divider';
 
+import { safeParseWithBrandTokens } from '../../../../documents/editor/brandTokens';
+
 import BaseSidebarPanel from './helpers/BaseSidebarPanel';
 import ColorInput from './helpers/inputs/ColorInput';
 import SliderInput from './helpers/inputs/SliderInput';
@@ -17,7 +19,7 @@ type DividerSidebarPanelProps = {
 export default function DividerSidebarPanel({ data, setData }: DividerSidebarPanelProps) {
   const [, setErrors] = useState<Zod.ZodError | null>(null);
   const updateData = (d: unknown) => {
-    const res = DividerPropsSchema.safeParse(d);
+    const res = safeParseWithBrandTokens(DividerPropsSchema, d);
     if (res.success) {
       setData(res.data);
       setErrors(null);

@@ -1,7 +1,16 @@
 import React, { useState } from 'react';
 
-import { AddOutlined, CloseOutlined } from '@mui/icons-material';
-import { ButtonBase, InputLabel, Menu, Stack } from '@mui/material';
+import { AddOutlined, CloseOutlined, LinkOutlined } from '@mui/icons-material';
+import { ButtonBase, InputLabel, Menu, Stack, Typography } from '@mui/material';
+
+import {
+  brandTokenOf,
+  displayColor,
+  TBrandColorKind,
+  tokenText,
+  wrappableTokenText,
+} from '../../../../../../../documents/editor/brandTokens';
+import { useBrand } from '../../../../../../../documents/editor/EditorContext';
 
 import Picker from './Picker';
 
@@ -20,16 +29,22 @@ type Props =
       label: string;
       onChange: (value: string | null) => void;
       defaultValue: string | null;
+      brandOptions?: TBrandColorKind;
     }
   | {
       nullable: false;
       label: string;
       onChange: (value: string) => void;
       defaultValue: string;
+      brandOptions?: TBrandColorKind;
     };
-export default function ColorInput({ label, defaultValue, onChange, nullable }: Props) {
+export default function ColorInput({ label, defaultValue, onChange, nullable, brandOptions }: Props) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [value, setValue] = useState(defaultValue);
+  const brand = useBrand();
+  // A field linked to a brand colour holds its token; show the colour it stands for.
+  const linkedToken = brandTokenOf(value);
+  const shownColor = displayColor(value, brand);
   const handleClickOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -54,8 +69,8 @@ export default function ColorInput({ label, defaultValue, onChange, nullable }: 
   };
 
   const renderOpenButton = () => {
-    if (value) {
-      return <ButtonBase onClick={handleClickOpen} sx={{ ...BUTTON_SX, bgcolor: value }} />;
+    if (shownColor) {
+      return <ButtonBase onClick={handleClickOpen} sx={{ ...BUTTON_SX, bgcolor: shownColor }} />;
     }
     return (
       <ButtonBase onClick={handleClickOpen} sx={{ ...BUTTON_SX }}>
@@ -64,12 +79,25 @@ export default function ColorInput({ label, defaultValue, onChange, nullable }: 
     );
   };
 
+  const renderLinkedToken = () => {
+    if (!linkedToken) {
+      return null;
+    }
+    return (
+      <Stack direction="row" spacing={0.5} alignItems="center" sx={{ color: 'grey.700', minWidth: 0 }}>
+        <LinkOutlined fontSize="small" />
+        <Typography variant="caption">{wrappableTokenText(tokenText(linkedToken, brand))}</Typography>
+      </Stack>
+    );
+  };
+
   return (
     <Stack alignItems="flex-start">
       <InputLabel sx={{ mb: 0.5 }}>{label}</InputLabel>
-      <Stack direction="row" spacing={1}>
+      <Stack direction="row" spacing={1} alignItems="center">
         {renderOpenButton()}
         {renderResetButton()}
+        {renderLinkedToken()}
       </Stack>
       <Menu
         anchorEl={anchorEl}
@@ -81,6 +109,7 @@ export default function ColorInput({ label, defaultValue, onChange, nullable }: 
       >
         <Picker
           value={value || ''}
+          brandOptions={brandOptions}
           onChange={(v) => {
             setValue(v);
             onChange(v);

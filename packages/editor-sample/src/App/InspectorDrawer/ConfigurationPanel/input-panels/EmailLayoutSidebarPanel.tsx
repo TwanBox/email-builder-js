@@ -5,6 +5,7 @@ import { RoundedCornerOutlined } from '@mui/icons-material';
 import EmailLayoutPropsSchema, {
   EmailLayoutProps,
 } from '../../../../documents/blocks/EmailLayout/EmailLayoutPropsSchema';
+import { safeParseWithBrandTokens } from '../../../../documents/editor/brandTokens';
 
 import BaseSidebarPanel from './helpers/BaseSidebarPanel';
 import ColorInput, { NullableColorInput } from './helpers/inputs/ColorInput';
@@ -21,7 +22,7 @@ export default function EmailLayoutSidebarFields({ data, setData }: EmailLayoutS
   const [, setErrors] = useState<Zod.ZodError | null>(null);
 
   const updateData = (d: unknown) => {
-    const res = EmailLayoutPropsSchema.safeParse(d);
+    const res = safeParseWithBrandTokens(EmailLayoutPropsSchema, d);
     if (res.success) {
       setData(res.data);
       setErrors(null);

@@ -17,8 +17,9 @@ type StylePropertyPanelProps = {
   name: keyof TStyle;
   value: TStyle;
   onChange: (style: TStyle) => void;
+  brandBackgroundColor?: boolean;
 };
-export default function SingleStylePropertyPanel({ name, value, onChange }: StylePropertyPanelProps) {
+export default function SingleStylePropertyPanel({ name, value, onChange, brandBackgroundColor }: StylePropertyPanelProps) {
   const defaultValue = value[name] ?? null;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleChange = (v: any) => {
@@ -29,7 +30,14 @@ export default function SingleStylePropertyPanel({ name, value, onChange }: Styl
 
   switch (name) {
     case 'backgroundColor':
-      return <NullableColorInput label={t.formatMessage({ id: 'backgroundColor' })} defaultValue={defaultValue} onChange={handleChange} />;
+      return (
+        <NullableColorInput
+          label={t.formatMessage({ id: 'backgroundColor' })}
+          defaultValue={defaultValue}
+          onChange={handleChange}
+          brandOptions={brandBackgroundColor ? 'brand' : undefined}
+        />
+      );
     case 'borderColor':
       return <NullableColorInput label={t.formatMessage({ id: 'borderColor' })} defaultValue={defaultValue} onChange={handleChange} />;
     case 'borderRadius':
