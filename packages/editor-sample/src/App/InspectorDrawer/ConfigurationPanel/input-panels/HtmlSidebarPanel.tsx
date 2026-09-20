@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 
 import { HtmlProps, HtmlPropsSchema } from '@usewaypoint/block-html';
 
+import { safeParseWithBrandTokens } from '../../../../documents/editor/brandTokens';
+
 import BaseSidebarPanel from './helpers/BaseSidebarPanel';
 import TextInput from './helpers/inputs/TextInput';
 import MultiStylePropertyPanel from './helpers/style-inputs/MultiStylePropertyPanel';
@@ -16,7 +18,7 @@ export default function HtmlSidebarPanel({ data, setData }: HtmlSidebarPanelProp
   const [, setErrors] = useState<Zod.ZodError | null>(null);
 
   const updateData = (d: unknown) => {
-    const res = HtmlPropsSchema.safeParse(d);
+    const res = safeParseWithBrandTokens(HtmlPropsSchema, d);
     if (res.success) {
       setData(res.data);
       setErrors(null);

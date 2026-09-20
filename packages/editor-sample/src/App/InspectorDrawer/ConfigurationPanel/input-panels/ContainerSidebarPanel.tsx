@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import ContainerPropsSchema, { ContainerProps } from '../../../../documents/blocks/Container/ContainerPropsSchema';
+import { safeParseWithBrandTokens } from '../../../../documents/editor/brandTokens';
 
 import BaseSidebarPanel from './helpers/BaseSidebarPanel';
 import MultiStylePropertyPanel from './helpers/style-inputs/MultiStylePropertyPanel';
@@ -15,7 +16,7 @@ type ContainerSidebarPanelProps = {
 export default function ContainerSidebarPanel({ data, setData }: ContainerSidebarPanelProps) {
   const [, setErrors] = useState<Zod.ZodError | null>(null);
   const updateData = (d: unknown) => {
-    const res = ContainerPropsSchema.safeParse(d);
+    const res = safeParseWithBrandTokens(ContainerPropsSchema, d);
     if (res.success) {
       setData(res.data);
       setErrors(null);
@@ -30,6 +31,7 @@ export default function ContainerSidebarPanel({ data, setData }: ContainerSideba
     <BaseSidebarPanel title={t.formatMessage({ id: 'containerBlock' })}>
       <MultiStylePropertyPanel
         names={['backgroundColor', 'borderColor', 'borderRadius', 'padding']}
+        brandBackgroundColor
         value={data.style}
         onChange={(style) => updateData({ ...data, style })}
       />

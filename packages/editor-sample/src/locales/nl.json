@@ -79,5 +79,7 @@
 
   "sending": "Verzenden",
   "textOnlyLabel": "Alleen tekst",
-  "textOnlyDescription": "Mail wordt verzonden als tekst (geen HTML)"
+  "textOnlyDescription": "Mail wordt verzonden als tekst (geen HTML)",
+
+  "customColour": "Eigen kleur"
 }

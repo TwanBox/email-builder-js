@@ -1,7 +1,18 @@
 import React from 'react';
 import { HexColorInput, HexColorPicker } from 'react-colorful';
+import { useIntl } from 'react-intl';
 
-import { Box, Stack, SxProps } from '@mui/material';
+import { Box, ButtonBase, Divider, Stack, Typography } from '@mui/material';
+
+import {
+  brandTokenOf,
+  brandTokensOfKind,
+  displayColor,
+  TBrandColorKind,
+  tokenText,
+  wrappableTokenText,
+} from '../../../../../../../documents/editor/brandTokens';
+import { useBrand } from '../../../../../../../documents/editor/EditorContext';
 
 import Swatch from './Swatch';
 
@@ -38,7 +49,7 @@ const DEFAULT_PRESET_COLORS = [
   '#000000',
 ];
 
-const SX: SxProps = {
+const SX = {
   p: 1,
   '.react-colorful__pointer ': {
     width: 16,
@@ -72,14 +83,68 @@ const SX: SxProps = {
 type Props = {
   value: string;
   onChange: (v: string) => void;
+  brandOptions?: TBrandColorKind;
 };
-export default function Picker({ value, onChange }: Props) {
+export default function Picker({ value, onChange, brandOptions }: Props) {
+  const brand = useBrand();
+  const t = useIntl();
+  // For a linked field the colour controls start from the brand colour; any change unlinks it.
+  const color = displayColor(value, brand) ?? '';
+
+  const renderBrandOptions = () => {
+    if (!brandOptions) {
+      return null;
+    }
+    const linkedToken = brandTokenOf(value);
+    return (
+      <>
+        {brandTokensOfKind(brandOptions).map((token) => {
+          const text = tokenText(token, brand);
+          const selected = linkedToken === token;
+          return (
+            <ButtonBase
+              key={token.nl}
+              onClick={() => onChange(text)}
+              sx={{
+                justifyContent: 'flex-start',
+                gap: 1,
+                p: 0.5,
+                border: '1px solid',
+                borderColor: selected ? 'black' : 'grey.200',
+                borderRadius: '4px',
+                textAlign: 'left',
+              }}
+            >
+              <Box
+                sx={{
+                  width: 24,
+                  height: 24,
+                  flexShrink: 0,
+                  border: '1px solid',
+                  borderColor: 'grey.300',
+                  borderRadius: '4px',
+                  bgcolor: displayColor(text, brand),
+                }}
+              />
+              <Typography variant="caption">{wrappableTokenText(text)}</Typography>
+            </ButtonBase>
+          );
+        })}
+        <Divider />
+        <Typography variant="caption" color="text.secondary">
+          {t.formatMessage({ id: 'customColour' })}
+        </Typography>
+      </>
+    );
+  };
+
   return (
-    <Stack spacing={1} sx={SX}>
-      <HexColorPicker color={value} onChange={onChange} />
+    <Stack spacing={1} sx={{ ...SX, ...(brandOptions && { width: 240, '.react-colorful': { width: '100%' } }) }}>
+      {renderBrandOptions()}
+      <HexColorPicker color={color} onChange={onChange} />
       <Swatch paletteColors={DEFAULT_PRESET_COLORS} value={value} onChange={onChange} />
       <Box pt={1}>
-        <HexColorInput prefixed color={value} onChange={onChange} />
+        <HexColorInput prefixed color={color} onChange={onChange} />
       </Box>
     </Stack>
   );

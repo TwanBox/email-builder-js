@@ -75,5 +75,7 @@
 
   "sending": "Envoi",
   "textOnlyLabel": "Texte uniquement",
-  "textOnlyDescription": "L'e-mail sera envoyé en texte brut (sans HTML)"
+  "textOnlyDescription": "L'e-mail sera envoyé en texte brut (sans HTML)",
+
+  "customColour": "Couleur personnalisée"
 }

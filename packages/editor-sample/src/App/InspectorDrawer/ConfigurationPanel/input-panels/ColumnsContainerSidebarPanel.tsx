@@ -11,6 +11,7 @@ import { ToggleButton } from '@mui/material';
 import ColumnsContainerPropsSchema, {
   ColumnsContainerProps,
 } from '../../../../documents/blocks/ColumnsContainer/ColumnsContainerPropsSchema';
+import { safeParseWithBrandTokens } from '../../../../documents/editor/brandTokens';
 
 import BaseSidebarPanel from './helpers/BaseSidebarPanel';
 import ColumnWidthsInput from './helpers/inputs/ColumnWidthsInput';
@@ -27,7 +28,7 @@ type ColumnsContainerPanelProps = {
 export default function ColumnsContainerPanel({ data, setData }: ColumnsContainerPanelProps) {
   const [, setErrors] = useState<Zod.ZodError | null>(null);
   const updateData = (d: unknown) => {
-    const res = ColumnsContainerPropsSchema.safeParse(d);
+    const res = safeParseWithBrandTokens(ColumnsContainerPropsSchema, d);
     if (res.success) {
       setData(res.data);
       setErrors(null);

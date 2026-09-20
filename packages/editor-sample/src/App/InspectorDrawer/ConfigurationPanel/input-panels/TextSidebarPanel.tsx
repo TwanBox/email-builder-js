@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 
 import { TextProps, TextPropsSchema } from '@usewaypoint/block-text';
 
+import { safeParseWithBrandTokens } from '../../../../documents/editor/brandTokens';
+
 import BaseSidebarPanel from './helpers/BaseSidebarPanel';
 // import BooleanInput from './helpers/inputs/BooleanInput';
 import TextInput from './helpers/inputs/TextInput';
@@ -17,7 +19,7 @@ export default function TextSidebarPanel({ data, setData }: TextSidebarPanelProp
   const [, setErrors] = useState<Zod.ZodError | null>(null);
 
   const updateData = (d: unknown) => {
-    const res = TextPropsSchema.safeParse(d);
+    const res = safeParseWithBrandTokens(TextPropsSchema, d);
     if (res.success) {
       setData(res.data);
       setErrors(null);

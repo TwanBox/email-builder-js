@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { ToggleButton } from '@mui/material';
 import { ButtonProps, ButtonPropsDefaults, ButtonPropsSchema } from '@usewaypoint/block-button';
 
+import { safeParseWithBrandTokens } from '../../../../documents/editor/brandTokens';
+
 import BaseSidebarPanel from './helpers/BaseSidebarPanel';
 import ColorInput from './helpers/inputs/ColorInput';
 import RadioGroupInput from './helpers/inputs/RadioGroupInput';
@@ -19,7 +21,7 @@ export default function ButtonSidebarPanel({ data, setData }: ButtonSidebarPanel
   const [, setErrors] = useState<Zod.ZodError | null>(null);
 
   const updateData = (d: unknown) => {
-    const res = ButtonPropsSchema.safeParse(d);
+    const res = safeParseWithBrandTokens(ButtonPropsSchema, d);
     if (res.success) {
       setData(res.data);
       setErrors(null);
@@ -79,11 +81,13 @@ export default function ButtonSidebarPanel({ data, setData }: ButtonSidebarPanel
       </RadioGroupInput>
       <ColorInput
         label={t.formatMessage({ id: 'textColor' })}
+        brandOptions="buttonText"
         defaultValue={buttonTextColor}
         onChange={(buttonTextColor) => updateData({ ...data, props: { ...data.props, buttonTextColor } })}
       />
       <ColorInput
         label={t.formatMessage({ id: 'buttonColor' })}
+        brandOptions="button"
         defaultValue={buttonBackgroundColor}
         onChange={(buttonBackgroundColor) => updateData({ ...data, props: { ...data.props, buttonBackgroundColor } })}
       />

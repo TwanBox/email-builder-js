@@ -5,6 +5,7 @@ import { renderToStaticMarkup } from '@usewaypoint/email-builder';
 import getConfiguration from '../../getConfiguration';
 import { stripHtmlToText } from '../../utils/stripHtmlToText';
 
+import { EMPTY_BRAND, parseBrand, TBrand } from './brandTokens';
 import { TEditorConfiguration } from './core';
 
 type TValue = {
@@ -20,6 +21,8 @@ type TValue = {
 
   textOnly: boolean;
   textBody: string;
+
+  brand: TBrand;
 };
 
 const editorStateStore = create<TValue>(() => ({
@@ -34,6 +37,8 @@ const editorStateStore = create<TValue>(() => ({
 
   textOnly: false,
   textBody: '',
+
+  brand: EMPTY_BRAND,
 }));
 
 // Listen for LOAD_TEMPLATE messages from the parent window.
@@ -41,7 +46,7 @@ const editorStateStore = create<TValue>(() => ({
 // the parent sends the message synchronously after iframe load.
 window.addEventListener('message', (event: MessageEvent) => {
   if (event.data?.type === 'LOAD_TEMPLATE') {
-    const { config, textOnly, textBody } = event.data.payload ?? {};
+    const { config, textOnly, textBody, brand } = event.data.payload ?? {};
 
     if (config && typeof config === 'object' && config.root) {
       editorStateStore.setState({
@@ -56,6 +61,8 @@ window.addEventListener('message', (event: MessageEvent) => {
     if (typeof textBody === 'string') {
       editorStateStore.setState({ textBody });
     }
+    // The campaign's and organisation's logo and colours, for previewing brand tokens.
+    editorStateStore.setState({ brand: parseBrand(brand) });
   }
 });
 
@@ -67,6 +74,10 @@ if (window.parent && window.parent !== window) {
 
 export function useDocument() {
   return editorStateStore((s) => s.document);
+}
+
+export function useBrand() {
+  return editorStateStore((s) => s.brand);
 }
 
 export function useSelectedBlockId() {
