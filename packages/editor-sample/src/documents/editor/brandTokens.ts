@@ -64,6 +64,9 @@ const FIELD: Record<TBrandKind, keyof TBrandValues> = {
   buttonText: 'buttonTextColor',
 };
 
+// The organisation languages that get the English variable names; anything else is Dutch.
+const LANGUAGES = ['en', 'fr', 'de'];
+
 /** The brand from a LOAD_TEMPLATE payload, with anything that is not a hex colour or https URL dropped. */
 export function parseBrand(input: unknown): TBrand {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -80,7 +83,10 @@ export function parseBrand(input: unknown): TBrand {
     };
   };
   return {
-    language: raw.language === undefined || raw.language === 'nl' ? 'nl' : 'en',
+    // An organisation with no language counts as Dutch, the way the backend and tele-mailing read it.
+    // tele-mailing always sends an explicit null when the field is empty, so testing for undefined
+    // alone would show that organisation the English names.
+    language: LANGUAGES.includes(raw.language) ? 'en' : 'nl',
     endClient: values(raw.endClient),
     organisation: values(raw.organisation),
   };
