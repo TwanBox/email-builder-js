@@ -18,8 +18,15 @@ type StylePropertyPanelProps = {
   value: TStyle;
   onChange: (style: TStyle) => void;
   brandBackgroundColor?: boolean;
+  brandPadding?: boolean;
 };
-export default function SingleStylePropertyPanel({ name, value, onChange, brandBackgroundColor }: StylePropertyPanelProps) {
+export default function SingleStylePropertyPanel({
+  name,
+  value,
+  onChange,
+  brandBackgroundColor,
+  brandPadding,
+}: StylePropertyPanelProps) {
   const defaultValue = value[name] ?? null;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleChange = (v: any) => {
@@ -65,6 +72,13 @@ export default function SingleStylePropertyPanel({ name, value, onChange, brandB
     case 'textAlign':
       return <TextAlignInput label={t.formatMessage({ id: 'alignment' })} defaultValue={defaultValue} onChange={handleChange} />;
     case 'padding':
-      return <PaddingInput label={t.formatMessage({ id: 'padding' })} defaultValue={defaultValue} onChange={handleChange} />;
+      return (
+        <PaddingInput
+          label={t.formatMessage({ id: 'padding' })}
+          defaultValue={defaultValue}
+          onChange={handleChange}
+          brandSync={brandPadding}
+        />
+      );
   }
 }

@@ -3,8 +3,9 @@ import React from 'react';
 import { ArrowDownwardOutlined, ArrowUpwardOutlined, DeleteOutlined } from '@mui/icons-material';
 import { IconButton, Paper, Stack, SxProps, Tooltip } from '@mui/material';
 
+import { isHiddenBlock } from '../../../editor/brandTokens';
 import { TEditorBlock } from '../../../editor/core';
-import { resetDocument, setSelectedBlockId, useDocument } from '../../../editor/EditorContext';
+import { resetDocument, setSelectedBlockId, useBrand, useDocument } from '../../../editor/EditorContext';
 import { ColumnsContainerProps } from '../../ColumnsContainer/ColumnsContainerPropsSchema';
 import { useIntl } from 'react-intl';
 
@@ -23,6 +24,7 @@ type Props = {
 };
 export default function TuneMenu({ blockId }: Props) {
   const document = useDocument();
+  const brand = useBrand();
   const t = useIntl()
 
   const handleDeleteClick = () => {
@@ -91,12 +93,19 @@ export default function TuneMenu({ blockId }: Props) {
       if (index < 0) {
         return ids;
       }
-      const childrenIds = [...ids];
-      if (direction === 'up' && index > 0) {
-        [childrenIds[index], childrenIds[index - 1]] = [childrenIds[index - 1], childrenIds[index]];
-      } else if (direction === 'down' && index < childrenIds.length - 1) {
-        [childrenIds[index], childrenIds[index + 1]] = [childrenIds[index + 1], childrenIds[index]];
+      // A block that is switched off (a branding bar) is not in the canvas: step over it, so one
+      // click moves the block one place in what the user sees.
+      const step = direction === 'up' ? -1 : 1;
+      let target = index + step;
+      while (target >= 0 && target < ids.length && isHiddenBlock(document[ids[target]], brand)) {
+        target += step;
       }
+      if (target < 0 || target >= ids.length) {
+        return ids;
+      }
+      const childrenIds = [...ids];
+      childrenIds.splice(index, 1);
+      childrenIds.splice(target, 0, blockId);
       return childrenIds;
     };
     const nDocument: typeof document = { ...document };

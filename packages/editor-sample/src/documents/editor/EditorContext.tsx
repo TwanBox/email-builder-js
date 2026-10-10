@@ -5,7 +5,7 @@ import { renderToStaticMarkup } from '@usewaypoint/email-builder';
 import getConfiguration from '../../getConfiguration';
 import { stripHtmlToText } from '../../utils/stripHtmlToText';
 
-import { EMPTY_BRAND, parseBrand, TBrand } from './brandTokens';
+import { EMPTY_BRAND, parseBrand, TBrand, TLayoutValues } from './brandTokens';
 import { TEditorConfiguration } from './core';
 
 type TValue = {
@@ -23,6 +23,9 @@ type TValue = {
   textBody: string;
 
   brand: TBrand;
+  // The campaign's layout settings that were changed here, through a field linked to them. They go
+  // to tele-mailing with every CONFIG_UPDATED, which saves them on the campaign with the mail.
+  campaignChanges: Partial<TLayoutValues>;
 };
 
 const editorStateStore = create<TValue>(() => ({
@@ -39,6 +42,7 @@ const editorStateStore = create<TValue>(() => ({
   textBody: '',
 
   brand: EMPTY_BRAND,
+  campaignChanges: {},
 }));
 
 // Listen for LOAD_TEMPLATE messages from the parent window.
@@ -62,9 +66,29 @@ window.addEventListener('message', (event: MessageEvent) => {
       editorStateStore.setState({ textBody });
     }
     // The campaign's and organisation's logo and colours, for previewing brand tokens.
-    editorStateStore.setState({ brand: parseBrand(brand) });
+    // A load is a fresh start: after a save tele-mailing sends the saved values back.
+    editorStateStore.setState({ brand: parseBrand(brand), campaignChanges: {} });
   }
 });
+
+// Tell tele-mailing what there is to save: the template, the text version and any campaign setting
+// that was changed through a linked field.
+function notifyParent() {
+  const { document, textOnly, textBody, campaignChanges } = editorStateStore.getState();
+  if (!window.parent) return;
+  window.parent.postMessage(
+    {
+      type: 'CONFIG_UPDATED',
+      payload: {
+        document,
+        textOnly,
+        textBody,
+        ...(Object.keys(campaignChanges).length > 0 && { campaign: campaignChanges }),
+      },
+    },
+    '*'
+  );
+}
 
 // Tell the parent we're ready so it can push LOAD_TEMPLATE without racing
 // the iframe `load` event.
@@ -143,20 +167,23 @@ export function setDocument(document: TValue['document']) {
     },
   });
 
-  const newConfig = editorStateStore.getState().document;
-  const { textOnly, textBody } = editorStateStore.getState();
+  notifyParent();
 
-  if (window.parent) {
-    window.parent.postMessage(
-      {
-        type: "CONFIG_UPDATED",
-        payload: { document: newConfig, textOnly, textBody }
-      },
-      "*"
-    );
-  }
+  return editorStateStore.getState().document;
+}
 
-  return newConfig;
+/**
+ * Change a layout setting of the campaign from a field that is linked to it. The template keeps its
+ * token; every block linked to the setting follows in the canvas, and the mails of the campaign that
+ * are linked to it follow once tele-mailing has saved it.
+ */
+export function setCampaignLayoutValue<K extends keyof TLayoutValues>(field: K, value: TLayoutValues[K]) {
+  const { brand, campaignChanges } = editorStateStore.getState();
+  editorStateStore.setState({
+    brand: { ...brand, endClient: { ...brand.endClient, [field]: value } },
+    campaignChanges: { ...campaignChanges, [field]: value },
+  });
+  notifyParent();
 }
 
 export function useTextOnly() {
@@ -179,33 +206,13 @@ export function setTextOnlyAndNotify(textOnly: boolean) {
 
   editorStateStore.setState({ textOnly, textBody });
 
-  const document = editorStateStore.getState().document;
-
-  if (window.parent) {
-    window.parent.postMessage(
-      {
-        type: "CONFIG_UPDATED",
-        payload: { document, textOnly, textBody }
-      },
-      "*"
-    );
-  }
+  notifyParent();
 }
 
 export function setTextBodyAndNotify(textBody: string) {
   editorStateStore.setState({ textBody });
 
-  const { document, textOnly } = editorStateStore.getState();
-
-  if (window.parent) {
-    window.parent.postMessage(
-      {
-        type: "CONFIG_UPDATED",
-        payload: { document, textOnly, textBody }
-      },
-      "*"
-    );
-  }
+  notifyParent();
 }
 
 export function toggleInspectorDrawerOpen() {

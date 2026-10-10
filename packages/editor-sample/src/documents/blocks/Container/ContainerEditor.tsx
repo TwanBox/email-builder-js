@@ -25,7 +25,8 @@ export default function ContainerEditor({ style, props }: ContainerProps) {
               type: 'Container',
               data: {
                 ...document[currentBlockId].data,
-                props: { childrenIds: childrenIds },
+                // Keep the other props: a branding bar carries its role and visibility there.
+                props: { ...props, childrenIds: childrenIds },
               },
             },
           });

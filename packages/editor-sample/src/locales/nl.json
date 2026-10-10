@@ -81,5 +81,13 @@
   "textOnlyLabel": "Alleen tekst",
   "textOnlyDescription": "Mail wordt verzonden als tekst (geen HTML)",
 
-  "customColour": "Eigen kleur"
+  "customColour": "Eigen kleur",
+
+  "brandingBars": "Branding bars",
+  "brandingBarHeader": "Bar boven",
+  "brandingBarFooter": "Bar onder",
+  "syncLinkedCampaign": "Gekoppeld aan de campagne. Een wijziging hier geldt na opslaan voor alle gekoppelde e-mails van deze campagne. Klik om los te koppelen en deze e-mail een eigen waarde te geven.",
+  "syncLinkedOrganisation": "Gekoppeld aan de organisatie. De waarde is hier niet te wijzigen. Klik om los te koppelen en deze e-mail een eigen waarde te geven.",
+  "syncUnlinkedCampaign": "Niet gekoppeld: deze e-mail heeft een eigen waarde. Klik om te koppelen aan de campagne, de e-mail volgt dan de instelling van de campagne.",
+  "syncUnlinkedOrganisation": "Niet gekoppeld: deze e-mail heeft een eigen waarde. Klik om te koppelen aan de organisatie, de e-mail volgt dan de instelling van de organisatie."
 }

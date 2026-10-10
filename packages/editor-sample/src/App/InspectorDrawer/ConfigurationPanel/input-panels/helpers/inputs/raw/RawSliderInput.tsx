@@ -10,6 +10,7 @@ type SliderInputProps = {
   units: string;
   min?: number;
   max?: number;
+  disabled?: boolean;
 
   value: number;
   setValue: (v: number) => void;
