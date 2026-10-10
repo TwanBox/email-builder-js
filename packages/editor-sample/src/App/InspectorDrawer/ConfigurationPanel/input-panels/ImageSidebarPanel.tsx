@@ -12,6 +12,7 @@ import { safeParseWithBrandTokens } from '../../../../documents/editor/brandToke
 
 import BaseSidebarPanel from './helpers/BaseSidebarPanel';
 import ImageUrlInput from './helpers/inputs/ImageUrlInput';
+import LogoWidthInput from './helpers/inputs/LogoWidthInput';
 import RadioGroupInput from './helpers/inputs/RadioGroupInput';
 import TextDimensionInput from './helpers/inputs/TextDimensionInput';
 import TextInput from './helpers/inputs/TextInput';
@@ -63,7 +64,8 @@ export default function ImageSidebarPanel({ data, setData }: ImageSidebarPanelPr
         }}
       />
       <Stack direction="row" spacing={2}>
-        <TextDimensionInput
+        {/* The width and the top and bottom padding can follow the campaign's or organisation's logo settings. */}
+        <LogoWidthInput
           label={t.formatMessage({ id: 'width' })}
           defaultValue={data.props?.width}
           onChange={(width) => updateData({ ...data, props: { ...data.props, width } })}
@@ -94,6 +96,7 @@ export default function ImageSidebarPanel({ data, setData }: ImageSidebarPanelPr
       <MultiStylePropertyPanel
         names={['backgroundColor', 'textAlign', 'padding']}
         brandBackgroundColor
+        brandPadding
         value={data.style}
         onChange={(style) => updateData({ ...data, style })}
       />

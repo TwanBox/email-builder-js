@@ -81,5 +81,13 @@
   "textOnlyLabel": "Text only",
   "textOnlyDescription": "Email will be sent as plain text (no HTML)",
 
-  "customColour": "Custom colour"
+  "customColour": "Custom colour",
+
+  "brandingBars": "Branding bars",
+  "brandingBarHeader": "Top bar",
+  "brandingBarFooter": "Bottom bar",
+  "syncLinkedCampaign": "Linked to the campaign. Once saved, a change here applies to every linked email of this campaign. Click to unlink and give this email a value of its own.",
+  "syncLinkedOrganisation": "Linked to the organisation. The value cannot be changed here. Click to unlink and give this email a value of its own.",
+  "syncUnlinkedCampaign": "Not linked: this email has a value of its own. Click to link it to the campaign, the email then follows the campaign's setting.",
+  "syncUnlinkedOrganisation": "Not linked: this email has a value of its own. Click to link it to the organisation, the email then follows the organisation's setting."
 }

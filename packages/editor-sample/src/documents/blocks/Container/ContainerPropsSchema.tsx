@@ -7,6 +7,10 @@ const ContainerPropsSchema = z.object({
   props: z
     .object({
       childrenIds: z.array(z.string()).optional().nullable(),
+      // A branding bar: the coloured strip above or below a mail. `visible` is a boolean, or the
+      // layout token of the campaign or organisation the bar follows (documents/editor/brandTokens.ts).
+      brandingBar: z.enum(['header', 'footer']).optional().nullable(),
+      visible: z.boolean().optional().nullable(),
     })
     .optional()
     .nullable(),

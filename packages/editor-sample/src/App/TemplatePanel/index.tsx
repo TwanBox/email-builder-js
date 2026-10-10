@@ -4,9 +4,11 @@ import { MonitorOutlined, PhoneIphoneOutlined } from '@mui/icons-material';
 import { Box, Stack, SxProps, ToggleButton, ToggleButtonGroup, Tooltip } from '@mui/material';
 import { Reader } from '@usewaypoint/email-builder';
 
+import { renderable } from '../../documents/editor/brandTokens';
 import EditorBlock from '../../documents/editor/EditorBlock';
 import {
   setSelectedScreenSize,
+  useBrand,
   useDocument,
   useSelectedMainTab,
   useSelectedScreenSize,
@@ -30,6 +32,7 @@ import { resetDocument } from '../../documents/editor/EditorContext';
 
 export default function TemplatePanel() {
   const document = useDocument();
+  const brand = useBrand();
   const selectedMainTab = useSelectedMainTab();
   const selectedScreenSize = useSelectedScreenSize();
   const textOnly = useTextOnly();
@@ -105,7 +108,8 @@ export default function TemplatePanel() {
       case 'preview':
         return (
           <Box sx={mainBoxSx}>
-            <Reader document={document} rootBlockId="root" />
+            {/* What the recipient gets: brand values filled in, switched-off bars left out. */}
+            <Reader document={renderable(document, brand)} rootBlockId="root" />
           </Box>
         );
       case 'html':

@@ -77,5 +77,13 @@
   "textOnlyLabel": "Texte uniquement",
   "textOnlyDescription": "L'e-mail sera envoyé en texte brut (sans HTML)",
 
-  "customColour": "Couleur personnalisée"
+  "customColour": "Couleur personnalisée",
+
+  "brandingBars": "Barres de marque",
+  "brandingBarHeader": "Barre du haut",
+  "brandingBarFooter": "Barre du bas",
+  "syncLinkedCampaign": "Lié à la campagne. Une fois enregistrée, une modification ici s'applique à tous les e-mails liés de cette campagne. Cliquez pour délier et donner à cet e-mail sa propre valeur.",
+  "syncLinkedOrganisation": "Lié à l'organisation. La valeur ne peut pas être modifiée ici. Cliquez pour délier et donner à cet e-mail sa propre valeur.",
+  "syncUnlinkedCampaign": "Non lié : cet e-mail a sa propre valeur. Cliquez pour le lier à la campagne, l'e-mail suit alors le réglage de la campagne.",
+  "syncUnlinkedOrganisation": "Non lié : cet e-mail a sa propre valeur. Cliquez pour le lier à l'organisation, l'e-mail suit alors le réglage de l'organisation."
 }
