@@ -84,9 +84,9 @@ function MeetingButtonRow() {
       : 'meetingButtonUnmanaged'
     : !allowed
       ? 'meetingButtonNotOnline'
-      : shown
-        ? 'meetingButtonFallback'
-        : null;
+      : null;
+  // While the button shows, the link button's hover text also says what becomes of the location line.
+  const fallbackNote = allowed && shown ? t.formatMessage({ id: 'meetingButtonFallback' }) : null;
 
   return (
     <>
@@ -106,6 +106,7 @@ function MeetingButtonRow() {
             token={token}
             onLink={(source) => set(tokenText(buttonToken('show', source), brand))}
             onUnlink={() => set(shown)}
+            note={fallbackNote}
           />
         )}
       </Stack>

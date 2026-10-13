@@ -12,6 +12,8 @@ type Props = {
   token: { source: TBrandSource } | null;
   onLink: (source: TBrandSource) => void;
   onUnlink: () => void;
+  // A second note for the hover text, about the field itself; it follows the first after a blank line.
+  note?: string | null;
 };
 
 /**
@@ -23,13 +25,24 @@ type Props = {
  * For a linked field that depends on what it is linked to (the token it holds), not on the audience:
  * a setting of the campaign is changed from here, one of the organisation is not.
  */
-export default function BrandSyncToggle({ token, onLink, onUnlink }: Props) {
+export default function BrandSyncToggle({ token, onLink, onUnlink, note }: Props) {
   const brand = useBrand();
   const t = useIntl();
+  const hoverText = (id: string) =>
+    note ? (
+      <>
+        {t.formatMessage({ id })}
+        <br />
+        <br />
+        {note}
+      </>
+    ) : (
+      t.formatMessage({ id })
+    );
 
   if (token) {
     return (
-      <Tooltip title={t.formatMessage({ id: token.source === 'endClient' ? 'syncLinkedCampaign' : 'syncLinkedOrganisation' })}>
+      <Tooltip title={hoverText(token.source === 'endClient' ? 'syncLinkedCampaign' : 'syncLinkedOrganisation')}>
         <IconButton size="small" onClick={onUnlink} sx={{ color: 'primary.main' }}>
           <LinkOutlined fontSize="small" />
         </IconButton>
@@ -43,7 +56,7 @@ export default function BrandSyncToggle({ token, onLink, onUnlink }: Props) {
     return null;
   }
   return (
-    <Tooltip title={t.formatMessage({ id: audience === 'endClient' ? 'syncUnlinkedCampaign' : 'syncUnlinkedOrganisation' })}>
+    <Tooltip title={hoverText(audience === 'endClient' ? 'syncUnlinkedCampaign' : 'syncUnlinkedOrganisation')}>
       <IconButton size="small" onClick={() => onLink(audience)} sx={{ color: 'grey.500' }}>
         <LinkOffOutlined fontSize="small" />
       </IconButton>
