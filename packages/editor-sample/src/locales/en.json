@@ -89,5 +89,12 @@
   "syncLinkedCampaign": "Linked to the campaign. Once saved, a change here applies to every linked email of this campaign. Click to unlink and give this email a value of its own.",
   "syncLinkedOrganisation": "Linked to the organisation. The value cannot be changed here. Click to unlink and give this email a value of its own.",
   "syncUnlinkedCampaign": "Not linked: this email has a value of its own. Click to link it to the campaign, the email then follows the campaign's setting.",
-  "syncUnlinkedOrganisation": "Not linked: this email has a value of its own. Click to link it to the organisation, the email then follows the organisation's setting."
+  "syncUnlinkedOrganisation": "Not linked: this email has a value of its own. Click to link it to the organisation, the email then follows the organisation's setting.",
+  "meetingButton": "Meeting button",
+  "meetingButtonLabel": "Button instead of the location line",
+  "meetingButtonFallback": "The line with the location is still in the text and goes into the email whenever an appointment's location is not a link.",
+  "meetingButtonNotOnline": "This campaign offers more than an online meeting. The email therefore always shows the line with the location, for an online appointment too.",
+  "meetingButtonNone": "This email does not mention the appointment's location, so there is nothing to switch.",
+  "meetingButtonUnmanaged": "This email holds the location in a way that cannot be switched here: inside a sentence, in an HTML block, or a button and a line side by side. Change it in the email itself.",
+  "locationLineHidden": "The line with the location is not in the email while the meeting button shows."
 }

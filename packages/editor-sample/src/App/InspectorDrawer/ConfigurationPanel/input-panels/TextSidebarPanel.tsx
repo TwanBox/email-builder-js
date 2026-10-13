@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 
+import { Typography } from '@mui/material';
 import { TextProps, TextPropsSchema } from '@usewaypoint/block-text';
 
 import { safeParseWithBrandTokens } from '../../../../documents/editor/brandTokens';
+import { useBrand, useDocument } from '../../../../documents/editor/EditorContext';
+import { locationLines } from '../../../../documents/editor/locationLine';
+import { meetingButtonShown } from '../../../../documents/editor/meetingButton';
 
 import BaseSidebarPanel from './helpers/BaseSidebarPanel';
 // import BooleanInput from './helpers/inputs/BooleanInput';
@@ -29,6 +33,10 @@ export default function TextSidebarPanel({ data, setData }: TextSidebarPanelProp
   };
 
   const t = useIntl()
+  const document = useDocument();
+  const brand = useBrand();
+  // The line is here to edit, but the mail shows the meeting button in its place.
+  const locationLineHidden = locationLines(data.props?.text).length > 0 && meetingButtonShown(document, brand);
 
   return (
     <BaseSidebarPanel title={t.formatMessage({ id: 'textBlock' })}>
@@ -38,6 +46,11 @@ export default function TextSidebarPanel({ data, setData }: TextSidebarPanelProp
         defaultValue={data.props?.text ?? ''}
         onChange={(text) => updateData({ ...data, props: { ...data.props, text, markdown: true } })}
       />
+      {locationLineHidden && (
+        <Typography variant="caption" color="text.secondary" display="block">
+          {t.formatMessage({ id: 'locationLineHidden' })}
+        </Typography>
+      )}
       {/* <BooleanInput
         label="Markdown"
         defaultValue={data.props?.markdown ?? true}

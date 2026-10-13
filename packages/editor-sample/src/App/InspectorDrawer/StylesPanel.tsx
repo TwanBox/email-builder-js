@@ -4,7 +4,8 @@ import { FormControlLabel, Stack, Switch, Typography } from '@mui/material';
 import { useIntl } from 'react-intl';
 
 import { barState, TBarRole, withBarVisible } from '../../documents/editor/brandingBars';
-import { layoutToken, tokenText } from '../../documents/editor/brandTokens';
+import { buttonToken, layoutToken, meetingButtonAllowed, tokenText } from '../../documents/editor/brandTokens';
+import { meetingState, withMeetingButton } from '../../documents/editor/meetingButton';
 import {
   setCampaignLayoutValue,
   setDocument,
@@ -56,6 +57,67 @@ function BrandingBarRow({ role }: { role: TBarRole }) {
   );
 }
 
+/**
+ * The meeting button: whether the mail shows a button to the meeting in place of its location line,
+ * and whether that follows the campaign's or organisation's setting. A button that is off is not in
+ * the canvas, which is why it is switched here; its size and style are on the button itself. Linked
+ * to the campaign, the switch changes the campaign's setting; linked to the organisation it only
+ * shows it.
+ *
+ * There is nothing to switch in a mail that does not tell where the meeting is, or tells it in a way
+ * of its own, and a campaign that also offers a phone call or a visit always shows the location line.
+ */
+function MeetingButtonRow() {
+  const document = useDocument();
+  const brand = useBrand();
+  const t = useIntl();
+  const state = meetingState(document, brand);
+  const allowed = meetingButtonAllowed(brand);
+  const switchable = state.kind === 'line' || state.kind === 'button';
+  const token = state.kind === 'button' ? state.token : null;
+  const shown = state.kind === 'button' && state.shown;
+  const set = (visible: boolean | string) => setDocument(withMeetingButton(document, visible, brand));
+
+  const note = !switchable
+    ? state.kind === 'none'
+      ? 'meetingButtonNone'
+      : 'meetingButtonUnmanaged'
+    : !allowed
+      ? 'meetingButtonNotOnline'
+      : shown
+        ? 'meetingButtonFallback'
+        : null;
+
+  return (
+    <>
+      <Stack direction="row" alignItems="center" justifyContent="space-between">
+        <FormControlLabel
+          control={
+            <Switch
+              checked={shown && allowed}
+              disabled={!switchable || !allowed || token?.source === 'organisation'}
+              onChange={(e) => (token ? setCampaignLayoutValue('showButton', e.target.checked) : set(e.target.checked))}
+            />
+          }
+          label={t.formatMessage({ id: 'meetingButtonLabel' })}
+        />
+        {switchable && (
+          <BrandSyncToggle
+            token={token}
+            onLink={(source) => set(tokenText(buttonToken('show', source), brand))}
+            onUnlink={() => set(shown)}
+          />
+        )}
+      </Stack>
+      {note && (
+        <Typography variant="caption" color="text.secondary" display="block" sx={{ mt: 0.5 }}>
+          {t.formatMessage({ id: note })}
+        </Typography>
+      )}
+    </>
+  );
+}
+
 export default function StylesPanel() {
   const block = useDocument().root;
   const textOnly = useTextOnly();
@@ -78,6 +140,9 @@ export default function StylesPanel() {
           <BrandingBarRow role="header" />
           <BrandingBarRow role="footer" />
         </Stack>
+      </BaseSidebarPanel>
+      <BaseSidebarPanel title={t.formatMessage({ id: 'meetingButton' })}>
+        <MeetingButtonRow />
       </BaseSidebarPanel>
       <BaseSidebarPanel title={t.formatMessage({ id: 'sending' })}>
         <FormControlLabel

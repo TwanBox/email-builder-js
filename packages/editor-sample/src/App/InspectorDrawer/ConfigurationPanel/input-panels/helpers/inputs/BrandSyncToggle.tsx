@@ -4,18 +4,18 @@ import { useIntl } from 'react-intl';
 import { LinkOffOutlined, LinkOutlined } from '@mui/icons-material';
 import { IconButton, Tooltip } from '@mui/material';
 
-import { TBrandSource, TLayoutToken } from '../../../../../../documents/editor/brandTokens';
+import { TBrandSource } from '../../../../../../documents/editor/brandTokens';
 import { useBrand } from '../../../../../../documents/editor/EditorContext';
 
 type Props = {
-  // The layout token the field holds, when it follows a setting.
-  token: TLayoutToken | null;
+  // The token the field holds, when it follows a setting of the campaign or the organisation.
+  token: { source: TBrandSource } | null;
   onLink: (source: TBrandSource) => void;
   onUnlink: () => void;
 };
 
 /**
- * Links a field to the layout setting of the campaign or the organisation, or gives it a value of
+ * Links a field to the setting of the campaign or the organisation, or gives it a value of
  * its own again. Which of the two a mail links to follows from who the mail is for
  * (`brand.audience`), so there is one button and no choice to get wrong.
  *

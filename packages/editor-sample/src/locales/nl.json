@@ -89,5 +89,12 @@
   "syncLinkedCampaign": "Gekoppeld aan de campagne. Een wijziging hier geldt na opslaan voor alle gekoppelde e-mails van deze campagne. Klik om los te koppelen en deze e-mail een eigen waarde te geven.",
   "syncLinkedOrganisation": "Gekoppeld aan de organisatie. De waarde is hier niet te wijzigen. Klik om los te koppelen en deze e-mail een eigen waarde te geven.",
   "syncUnlinkedCampaign": "Niet gekoppeld: deze e-mail heeft een eigen waarde. Klik om te koppelen aan de campagne, de e-mail volgt dan de instelling van de campagne.",
-  "syncUnlinkedOrganisation": "Niet gekoppeld: deze e-mail heeft een eigen waarde. Klik om te koppelen aan de organisatie, de e-mail volgt dan de instelling van de organisatie."
+  "syncUnlinkedOrganisation": "Niet gekoppeld: deze e-mail heeft een eigen waarde. Klik om te koppelen aan de organisatie, de e-mail volgt dan de instelling van de organisatie.",
+  "meetingButton": "Meeting-knop",
+  "meetingButtonLabel": "Knop in plaats van locatieregel",
+  "meetingButtonFallback": "De regel met de locatie staat nog in de tekst en komt in de e-mail zodra de locatie van een afspraak geen link is.",
+  "meetingButtonNotOnline": "Deze campagne biedt niet alleen een online meeting aan. De e-mail toont daarom altijd de regel met de locatie, ook bij een online afspraak.",
+  "meetingButtonNone": "Deze e-mail noemt de locatie van de afspraak niet, dus er is niets om te schakelen.",
+  "meetingButtonUnmanaged": "De locatie staat in deze e-mail op een manier die hier niet te schakelen is: midden in een zin, in een HTML-blok, of een knop en een regel naast elkaar. Pas dit in de e-mail zelf aan.",
+  "locationLineHidden": "De regel met de locatie staat niet in de e-mail zolang de meeting-knop wordt getoond."
 }
