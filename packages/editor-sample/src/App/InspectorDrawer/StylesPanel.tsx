@@ -12,6 +12,7 @@ import {
   setDocument,
   useBrand,
   useDocument,
+  useTemplateLoaded,
   useTextOnly,
   setTextOnlyAndNotify,
 } from '../../documents/editor/EditorContext';
@@ -72,6 +73,7 @@ function BrandingBarRow({ role }: { role: TBarRole }) {
 function MeetingButtonRow() {
   const document = useDocument();
   const brand = useBrand();
+  const loaded = useTemplateLoaded();
   const t = useIntl();
   const state = meetingState(document, brand);
   const allowed = meetingButtonAllowed(brand);
@@ -81,16 +83,20 @@ function MeetingButtonRow() {
   const set = (visible: boolean | string) => setDocument(withMeetingButton(document, visible, brand));
 
   // What there is to say about the switch as it is: why it cannot be switched, or what becomes of
-  // the location line while the button shows. It is in the hover text, not under the switch.
-  const noteId = !switchable
-    ? state.kind === 'none'
-      ? 'meetingButtonNone'
-      : 'meetingButtonUnmanaged'
-    : !allowed
-      ? 'meetingButtonNotOnline'
-      : shown
-        ? 'meetingButtonFallback'
-        : null;
+  // the location line while the button shows. It is in the hover text, not under the switch. Nothing
+  // is said before the mail has arrived: the placeholder that is shown until then has no location,
+  // and its note would show for a moment in every mail.
+  const noteId = !loaded
+    ? null
+    : !switchable
+      ? state.kind === 'none'
+        ? 'meetingButtonNone'
+        : 'meetingButtonUnmanaged'
+      : !allowed
+        ? 'meetingButtonNotOnline'
+        : shown
+          ? 'meetingButtonFallback'
+          : null;
   const note = noteId ? t.formatMessage({ id: noteId }) : null;
   // The link button carries the note. Where there is none - nothing to switch, or nothing to link
   // to - an info icon takes its place, as large as the link button so the rows line up.

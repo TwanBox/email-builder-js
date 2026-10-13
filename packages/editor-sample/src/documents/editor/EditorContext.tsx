@@ -10,6 +10,9 @@ import { TEditorConfiguration } from './core';
 
 type TValue = {
   document: TEditorConfiguration;
+  // False while the builder is embedded and still waits for its mail: `document` is a placeholder
+  // until then, and anything said about it would be about the wrong mail.
+  templateLoaded: boolean;
 
   selectedBlockId: string | null;
   selectedSidebarTab: 'block-configuration' | 'styles' | 'default-variables';
@@ -31,6 +34,8 @@ type TValue = {
 
 const editorStateStore = create<TValue>(() => ({
   document: getConfiguration(window.location.hash),
+  // Opened on its own, the builder edits the document it starts with.
+  templateLoaded: window.parent === window,
   selectedBlockId: null,
   selectedSidebarTab: 'styles',
   selectedMainTab: 'editor',
@@ -56,6 +61,7 @@ window.addEventListener('message', (event: MessageEvent) => {
     if (config && typeof config === 'object' && config.root) {
       editorStateStore.setState({
         document: config as TEditorConfiguration,
+        templateLoaded: true,
         selectedBlockId: null,
         selectedSidebarTab: 'styles',
       });
@@ -103,6 +109,11 @@ export function useDocument() {
 
 export function useBrand() {
   return editorStateStore((s) => s.brand);
+}
+
+/** Whether `useDocument` is the mail that is being edited, and no longer the placeholder from before it arrived. */
+export function useTemplateLoaded() {
+  return editorStateStore((s) => s.templateLoaded);
 }
 
 export function useSelectedBlockId() {
