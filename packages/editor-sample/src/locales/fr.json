@@ -85,5 +85,12 @@
   "syncLinkedCampaign": "Lié à la campagne. Une fois enregistrée, une modification ici s'applique à tous les e-mails liés de cette campagne. Cliquez pour délier et donner à cet e-mail sa propre valeur.",
   "syncLinkedOrganisation": "Lié à l'organisation. La valeur ne peut pas être modifiée ici. Cliquez pour délier et donner à cet e-mail sa propre valeur.",
   "syncUnlinkedCampaign": "Non lié : cet e-mail a sa propre valeur. Cliquez pour le lier à la campagne, l'e-mail suit alors le réglage de la campagne.",
-  "syncUnlinkedOrganisation": "Non lié : cet e-mail a sa propre valeur. Cliquez pour le lier à l'organisation, l'e-mail suit alors le réglage de l'organisation."
+  "syncUnlinkedOrganisation": "Non lié : cet e-mail a sa propre valeur. Cliquez pour le lier à l'organisation, l'e-mail suit alors le réglage de l'organisation.",
+  "meetingButton": "Bouton de réunion",
+  "meetingButtonLabel": "Bouton à la place de la ligne du lieu",
+  "meetingButtonFallback": "La ligne du lieu reste dans le texte et figure dans l'e-mail dès que le lieu d'un rendez-vous n'est pas un lien.",
+  "meetingButtonNotOnline": "Cette campagne ne propose pas uniquement une réunion en ligne. L'e-mail affiche donc toujours la ligne du lieu, même pour un rendez-vous en ligne.",
+  "meetingButtonNone": "Cet e-mail ne mentionne pas le lieu du rendez-vous, il n'y a donc rien à basculer.",
+  "meetingButtonUnmanaged": "Le lieu figure dans cet e-mail d'une manière qui ne peut pas être basculée ici : au milieu d'une phrase, dans un bloc HTML, ou un bouton et une ligne côte à côte. Modifiez-le dans l'e-mail lui-même.",
+  "locationLineHidden": "La ligne du lieu ne figure pas dans l'e-mail tant que le bouton de réunion est affiché."
 }

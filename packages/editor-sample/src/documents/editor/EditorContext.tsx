@@ -5,11 +5,14 @@ import { renderToStaticMarkup } from '@usewaypoint/email-builder';
 import getConfiguration from '../../getConfiguration';
 import { stripHtmlToText } from '../../utils/stripHtmlToText';
 
-import { EMPTY_BRAND, parseBrand, TBrand, TLayoutValues } from './brandTokens';
+import { EMPTY_BRAND, parseBrand, renderable, TBrand, TCampaignSettings } from './brandTokens';
 import { TEditorConfiguration } from './core';
 
 type TValue = {
   document: TEditorConfiguration;
+  // False while the builder is embedded and still waits for its mail: `document` is a placeholder
+  // until then, and anything said about it would be about the wrong mail.
+  templateLoaded: boolean;
 
   selectedBlockId: string | null;
   selectedSidebarTab: 'block-configuration' | 'styles' | 'default-variables';
@@ -23,13 +26,16 @@ type TValue = {
   textBody: string;
 
   brand: TBrand;
-  // The campaign's layout settings that were changed here, through a field linked to them. They go
-  // to tele-mailing with every CONFIG_UPDATED, which saves them on the campaign with the mail.
-  campaignChanges: Partial<TLayoutValues>;
+  // The campaign's settings (logo layout, branding bars, meeting button) that were changed here,
+  // through a field linked to them. They go to tele-mailing with every CONFIG_UPDATED, which saves
+  // them on the campaign with the mail.
+  campaignChanges: Partial<TCampaignSettings>;
 };
 
 const editorStateStore = create<TValue>(() => ({
   document: getConfiguration(window.location.hash),
+  // Opened on its own, the builder edits the document it starts with.
+  templateLoaded: window.parent === window,
   selectedBlockId: null,
   selectedSidebarTab: 'styles',
   selectedMainTab: 'editor',
@@ -55,6 +61,7 @@ window.addEventListener('message', (event: MessageEvent) => {
     if (config && typeof config === 'object' && config.root) {
       editorStateStore.setState({
         document: config as TEditorConfiguration,
+        templateLoaded: true,
         selectedBlockId: null,
         selectedSidebarTab: 'styles',
       });
@@ -102,6 +109,11 @@ export function useDocument() {
 
 export function useBrand() {
   return editorStateStore((s) => s.brand);
+}
+
+/** Whether `useDocument` is the mail that is being edited, and no longer the placeholder from before it arrived. */
+export function useTemplateLoaded() {
+  return editorStateStore((s) => s.templateLoaded);
 }
 
 export function useSelectedBlockId() {
@@ -173,17 +185,25 @@ export function setDocument(document: TValue['document']) {
 }
 
 /**
- * Change a layout setting of the campaign from a field that is linked to it. The template keeps its
- * token; every block linked to the setting follows in the canvas, and the mails of the campaign that
- * are linked to it follow once tele-mailing has saved it.
+ * Change a setting of the campaign from a field that is linked to it. The template keeps its token;
+ * every block linked to the setting follows in the canvas, and the mails of the campaign that are
+ * linked to it follow once tele-mailing has saved it.
  */
-export function setCampaignLayoutValue<K extends keyof TLayoutValues>(field: K, value: TLayoutValues[K]) {
+export function setCampaignLayoutValue<K extends keyof TCampaignSettings>(field: K, value: TCampaignSettings[K]) {
   const { brand, campaignChanges } = editorStateStore.getState();
   editorStateStore.setState({
     brand: { ...brand, endClient: { ...brand.endClient, [field]: value } },
     campaignChanges: { ...campaignChanges, [field]: value },
   });
   notifyParent();
+}
+
+/**
+ * The mail a text version is made from: without the blocks that are switched off, and with its
+ * location line in place of the meeting button, which plain text cannot show.
+ */
+export function textVersionSource(document: TEditorConfiguration, brand: TBrand): TEditorConfiguration {
+  return renderable(document, brand, { meetingButton: false });
 }
 
 export function useTextOnly() {
@@ -200,7 +220,7 @@ export function setTextOnlyAndNotify(textOnly: boolean) {
   // Auto-populate textBody from the rendered HTML when enabling text-only for the first time
   let textBody = state.textBody;
   if (textOnly && !textBody) {
-    const html = renderToStaticMarkup(state.document, { rootBlockId: 'root' });
+    const html = renderToStaticMarkup(textVersionSource(state.document, state.brand), { rootBlockId: 'root' });
     textBody = stripHtmlToText(html);
   }
 

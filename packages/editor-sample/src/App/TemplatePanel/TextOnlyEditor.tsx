@@ -5,14 +5,17 @@ import { renderToStaticMarkup } from '@usewaypoint/email-builder';
 import { useIntl } from 'react-intl';
 
 import {
+  useBrand,
   useDocument,
   useTextBody,
   setTextBodyAndNotify,
+  textVersionSource,
 } from '../../documents/editor/EditorContext';
 import { stripHtmlToText } from '../../utils/stripHtmlToText';
 
 export default function TextOnlyEditor() {
   const document = useDocument();
+  const brand = useBrand();
   const textBody = useTextBody();
   const initialised = useRef(false);
   const t = useIntl();
@@ -22,7 +25,7 @@ export default function TextOnlyEditor() {
   //  but no textBody was saved yet)
   useEffect(() => {
     if (!initialised.current && !textBody) {
-      const html = renderToStaticMarkup(document, { rootBlockId: 'root' });
+      const html = renderToStaticMarkup(textVersionSource(document, brand), { rootBlockId: 'root' });
       setTextBodyAndNotify(stripHtmlToText(html));
     }
     initialised.current = true;

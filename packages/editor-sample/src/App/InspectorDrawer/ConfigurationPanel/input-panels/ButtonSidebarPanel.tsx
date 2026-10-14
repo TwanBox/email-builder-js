@@ -6,6 +6,7 @@ import { ButtonProps, ButtonPropsDefaults, ButtonPropsSchema } from '@usewaypoin
 import { safeParseWithBrandTokens } from '../../../../documents/editor/brandTokens';
 
 import BaseSidebarPanel from './helpers/BaseSidebarPanel';
+import ButtonSettingInput from './helpers/inputs/ButtonSettingInput';
 import ColorInput from './helpers/inputs/ColorInput';
 import RadioGroupInput from './helpers/inputs/RadioGroupInput';
 import TextInput from './helpers/inputs/TextInput';
@@ -35,8 +36,6 @@ export default function ButtonSidebarPanel({ data, setData }: ButtonSidebarPanel
   const text = data.props?.text ?? ButtonPropsDefaults.text;
   const url = data.props?.url ?? ButtonPropsDefaults.url;
   const fullWidth = data.props?.fullWidth ?? ButtonPropsDefaults.fullWidth;
-  const size = data.props?.size ?? ButtonPropsDefaults.size;
-  const buttonStyle = data.props?.buttonStyle ?? ButtonPropsDefaults.buttonStyle;
   const buttonTextColor = data.props?.buttonTextColor ?? ButtonPropsDefaults.buttonTextColor;
   const buttonBackgroundColor = data.props?.buttonBackgroundColor ?? ButtonPropsDefaults.buttonBackgroundColor;
 
@@ -60,25 +59,30 @@ export default function ButtonSidebarPanel({ data, setData }: ButtonSidebarPanel
         <ToggleButton value="FULL_WIDTH">{t.formatMessage({ id: 'full' })}</ToggleButton>
         <ToggleButton value="AUTO">{t.formatMessage({ id: 'auto' })}</ToggleButton>
       </RadioGroupInput>
-      <RadioGroupInput
+      {/* The size and the style can follow the setting of the campaign or the organisation. */}
+      <ButtonSettingInput
+        kind="size"
         label={t.formatMessage({ id: 'size' })}
-        defaultValue={size}
+        defaultValue={data.props?.size}
+        fallback={ButtonPropsDefaults.size}
         onChange={(size) => updateData({ ...data, props: { ...data.props, size } })}
       >
         <ToggleButton value="x-small">Xs</ToggleButton>
         <ToggleButton value="small">Sm</ToggleButton>
         <ToggleButton value="medium">Md</ToggleButton>
         <ToggleButton value="large">Lg</ToggleButton>
-      </RadioGroupInput>
-      <RadioGroupInput
+      </ButtonSettingInput>
+      <ButtonSettingInput
+        kind="format"
         label={t.formatMessage({ id: 'style' })}
-        defaultValue={buttonStyle}
+        defaultValue={data.props?.buttonStyle}
+        fallback={ButtonPropsDefaults.buttonStyle}
         onChange={(buttonStyle) => updateData({ ...data, props: { ...data.props, buttonStyle } })}
       >
         <ToggleButton value="rectangle">{t.formatMessage({ id: 'rectangle' })}</ToggleButton>
         <ToggleButton value="rounded">{t.formatMessage({ id: 'rounded' })}</ToggleButton>
         <ToggleButton value="pill">{t.formatMessage({ id: 'pill' })}</ToggleButton>
-      </RadioGroupInput>
+      </ButtonSettingInput>
       <ColorInput
         label={t.formatMessage({ id: 'textColor' })}
         brandOptions="buttonText"

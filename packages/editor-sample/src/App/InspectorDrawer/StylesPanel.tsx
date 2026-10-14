@@ -1,15 +1,18 @@
 import React from 'react';
 
-import { FormControlLabel, Stack, Switch, Typography } from '@mui/material';
+import { InfoOutlined } from '@mui/icons-material';
+import { Box, FormControlLabel, Stack, Switch, Tooltip, Typography } from '@mui/material';
 import { useIntl } from 'react-intl';
 
 import { barState, TBarRole, withBarVisible } from '../../documents/editor/brandingBars';
-import { layoutToken, tokenText } from '../../documents/editor/brandTokens';
+import { buttonToken, layoutToken, meetingButtonAllowed, tokenText } from '../../documents/editor/brandTokens';
+import { meetingState, withMeetingButton } from '../../documents/editor/meetingButton';
 import {
   setCampaignLayoutValue,
   setDocument,
   useBrand,
   useDocument,
+  useTemplateLoaded,
   useTextOnly,
   setTextOnlyAndNotify,
 } from '../../documents/editor/EditorContext';
@@ -56,6 +59,81 @@ function BrandingBarRow({ role }: { role: TBarRole }) {
   );
 }
 
+/**
+ * The meeting button: whether the mail shows a button to the meeting in place of its location line,
+ * and whether that follows the campaign's or organisation's setting. A button that is off is not in
+ * the canvas, which is why it is switched here; its size and style are on the button itself. Linked
+ * to the campaign, the switch changes the campaign's setting; linked to the organisation it only
+ * shows it.
+ *
+ * There is nothing to switch in a mail that does not tell where the meeting is, or tells it in a way
+ * of its own, and a campaign that also offers a phone call or a visit always shows the location line.
+ * The hover text of the icon next to the switch says which of these applies.
+ */
+function MeetingButtonRow() {
+  const document = useDocument();
+  const brand = useBrand();
+  const loaded = useTemplateLoaded();
+  const t = useIntl();
+  const state = meetingState(document, brand);
+  const allowed = meetingButtonAllowed(brand);
+  const switchable = state.kind === 'line' || state.kind === 'button';
+  const token = state.kind === 'button' ? state.token : null;
+  const shown = state.kind === 'button' && state.shown;
+  const set = (visible: boolean | string) => setDocument(withMeetingButton(document, visible, brand));
+
+  // What there is to say about the switch as it is: why it cannot be switched, or what becomes of
+  // the location line while the button shows. It is in the hover text, not under the switch. Nothing
+  // is said before the mail has arrived: the placeholder that is shown until then has no location,
+  // and its note would show for a moment in every mail.
+  const noteId = !loaded
+    ? null
+    : !switchable
+      ? state.kind === 'none'
+        ? 'meetingButtonNone'
+        : 'meetingButtonUnmanaged'
+      : !allowed
+        ? 'meetingButtonNotOnline'
+        : shown
+          ? 'meetingButtonFallback'
+          : null;
+  const note = noteId ? t.formatMessage({ id: noteId }) : null;
+  // The link button carries the note. Where there is none - nothing to switch, or nothing to link
+  // to - an info icon takes its place, as large as the link button so the rows line up.
+  const linkable = switchable && (token !== null || brand.audience !== null);
+
+  return (
+    <Stack direction="row" alignItems="center" justifyContent="space-between">
+      <FormControlLabel
+        control={
+          <Switch
+            checked={shown && allowed}
+            disabled={!switchable || !allowed || token?.source === 'organisation'}
+            onChange={(e) => (token ? setCampaignLayoutValue('showButton', e.target.checked) : set(e.target.checked))}
+          />
+        }
+        label={t.formatMessage({ id: 'meetingButtonLabel' })}
+      />
+      {linkable ? (
+        <BrandSyncToggle
+          token={token}
+          onLink={(source) => set(tokenText(buttonToken('show', source), brand))}
+          onUnlink={() => set(shown)}
+          note={note}
+        />
+      ) : (
+        note && (
+          <Tooltip title={note}>
+            <Box component="span" sx={{ display: 'inline-flex', p: '5px', color: 'grey.500' }}>
+              <InfoOutlined fontSize="small" />
+            </Box>
+          </Tooltip>
+        )
+      )}
+    </Stack>
+  );
+}
+
 export default function StylesPanel() {
   const block = useDocument().root;
   const textOnly = useTextOnly();
@@ -78,6 +156,9 @@ export default function StylesPanel() {
           <BrandingBarRow role="header" />
           <BrandingBarRow role="footer" />
         </Stack>
+      </BaseSidebarPanel>
+      <BaseSidebarPanel title={t.formatMessage({ id: 'meetingButton' })}>
+        <MeetingButtonRow />
       </BaseSidebarPanel>
       <BaseSidebarPanel title={t.formatMessage({ id: 'sending' })}>
         <FormControlLabel
