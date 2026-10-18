@@ -12,6 +12,8 @@ type MultiStylePropertyPanelProps = {
   brandBackgroundColor?: boolean;
   // Let the top and bottom padding follow the logo padding of the campaign or organisation (Image).
   brandPadding?: boolean;
+  // Let the background colour follow the campaign's or organisation's brand colour behind the logo (Image).
+  brandLogoBackground?: boolean;
 };
 export default function MultiStylePropertyPanel({
   names,
@@ -19,6 +21,7 @@ export default function MultiStylePropertyPanel({
   onChange,
   brandBackgroundColor,
   brandPadding,
+  brandLogoBackground,
 }: MultiStylePropertyPanelProps) {
   return (
     <>
@@ -30,6 +33,7 @@ export default function MultiStylePropertyPanel({
           onChange={onChange}
           brandBackgroundColor={brandBackgroundColor}
           brandPadding={brandPadding}
+          brandLogoBackground={brandLogoBackground}
         />
       ))}
     </>

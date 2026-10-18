@@ -4,6 +4,10 @@ import ContainerPropsSchema from '../blocks/Container/ContainerPropsSchema';
 
 import { barState, findBars, withBarVisible } from './brandingBars';
 import {
+  BACKGROUND_TOKENS,
+  backgroundToken,
+  backgroundTokenOf,
+  displayColor,
   isHiddenBlock,
   LAYOUT_TOKENS,
   layoutToken,
@@ -174,5 +178,47 @@ describe('branding bars in the Styles tab', () => {
   it('adds nothing when a missing bar is only switched off', () => {
     const document = mail();
     expect(withBarVisible(document, 'header', false, brand())).toBe(document);
+  });
+});
+
+describe('the brand colour behind the logo', () => {
+  const logo = (backgroundColor: unknown) => ({
+    type: 'Image',
+    data: { style: { backgroundColor, padding: { top: 40, bottom: 40, left: 0, right: 0 } }, props: { url: 'https://x/l.png' } },
+  });
+
+  it('has the names the backend resolves', () => {
+    expect(BACKGROUND_TOKENS.map((t) => [t.source, t.nl, t.en])).toEqual([
+      ['endClient', 'LOGO_ACHTERGROND_EINDKLANT', 'LOGO_BACKGROUND_ENDCLIENT'],
+      ['organisation', 'LOGO_ACHTERGROND_ORGANISATIE', 'LOGO_BACKGROUND_ORGANISATION'],
+    ]);
+  });
+
+  it('is the brand colour of the same source when the setting is on, and no background otherwise', () => {
+    const on = brand({ brandColor: '#123456', logoBackground: true }, { brandColor: '#abcdef', logoBackground: false });
+    expect(resolveBrandTokens(logo('{{LOGO_ACHTERGROND_EINDKLANT}}'), on).data.style.backgroundColor).toBe('#123456');
+    expect(resolveBrandTokens(logo('{{LOGO_BACKGROUND_ORGANISATION}}'), on).data.style.backgroundColor).toBeNull();
+    // An empty setting is off, so nothing changes before it is set.
+    expect(resolveBrandTokens(logo('{{LOGO_ACHTERGROND_EINDKLANT}}'), brand()).data.style.backgroundColor).toBeNull();
+  });
+
+  it('is white when the setting is on but the brand colour is empty, like any colour token', () => {
+    expect(resolveBrandTokens(logo('{{LOGO_ACHTERGROND_EINDKLANT}}'), brand({ logoBackground: true })).data.style.backgroundColor).toBe(
+      '#FFFFFF'
+    );
+  });
+
+  it('is shown as the colour it stands for, and validates', () => {
+    const on = brand({ brandColor: '#123456', logoBackground: true });
+    expect(displayColor('{{LOGO_ACHTERGROND_EINDKLANT}}', on)).toBe('#123456');
+    expect(backgroundTokenOf('{{LOGO_ACHTERGROND_EINDKLANT}}')).toEqual(backgroundToken('endClient'));
+    expect(backgroundTokenOf('#123456')).toBeNull();
+    const data = logo('{{LOGO_ACHTERGROND_EINDKLANT}}').data;
+    expect(safeParseWithBrandTokens(ImagePropsSchema, data)).toEqual({ success: true, data });
+  });
+
+  it('is written in the organisation language', () => {
+    expect(tokenText(backgroundToken('endClient'), brand())).toBe('{{LOGO_ACHTERGROND_EINDKLANT}}');
+    expect(tokenText(backgroundToken('organisation'), parseBrand({ language: 'en' }))).toBe('{{LOGO_BACKGROUND_ORGANISATION}}');
   });
 });

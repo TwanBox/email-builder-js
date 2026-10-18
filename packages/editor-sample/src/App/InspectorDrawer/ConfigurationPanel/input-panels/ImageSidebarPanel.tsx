@@ -97,6 +97,7 @@ export default function ImageSidebarPanel({ data, setData }: ImageSidebarPanelPr
         names={['backgroundColor', 'textAlign', 'padding']}
         brandBackgroundColor
         brandPadding
+        brandLogoBackground
         value={data.style}
         onChange={(style) => updateData({ ...data, style })}
       />
