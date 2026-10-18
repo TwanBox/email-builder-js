@@ -90,6 +90,7 @@
   "syncLinkedOrganisation": "Linked to the organisation. The value cannot be changed here. Click to unlink and give this email a value of its own.",
   "syncUnlinkedCampaign": "Not linked: this email has a value of its own. Click to link it to the campaign, the email then follows the campaign's setting.",
   "syncUnlinkedOrganisation": "Not linked: this email has a value of its own. Click to link it to the organisation, the email then follows the organisation's setting.",
+  "logoBackgroundSwitch": "Brand colour behind logo",
   "meetingButton": "Meeting button",
   "meetingButtonLabel": "Button instead of the location line",
   "meetingButtonFallback": "The line with the location is still in the text and goes into the email whenever an appointment's location is not a link.",

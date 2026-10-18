@@ -7,6 +7,7 @@ import { NullableColorInput } from '../inputs/ColorInput';
 import { NullableFontFamily } from '../inputs/FontFamily';
 import FontSizeInput from '../inputs/FontSizeInput';
 import FontWeightInput from '../inputs/FontWeightInput';
+import LogoBackgroundInput from '../inputs/LogoBackgroundInput';
 import PaddingInput from '../inputs/PaddingInput';
 import SliderInput from '../inputs/SliderInput';
 import TextAlignInput from '../inputs/TextAlignInput';
@@ -19,6 +20,7 @@ type StylePropertyPanelProps = {
   onChange: (style: TStyle) => void;
   brandBackgroundColor?: boolean;
   brandPadding?: boolean;
+  brandLogoBackground?: boolean;
 };
 export default function SingleStylePropertyPanel({
   name,
@@ -26,6 +28,7 @@ export default function SingleStylePropertyPanel({
   onChange,
   brandBackgroundColor,
   brandPadding,
+  brandLogoBackground,
 }: StylePropertyPanelProps) {
   const defaultValue = value[name] ?? null;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -37,6 +40,15 @@ export default function SingleStylePropertyPanel({
 
   switch (name) {
     case 'backgroundColor':
+      if (brandLogoBackground) {
+        return (
+          <LogoBackgroundInput
+            label={t.formatMessage({ id: 'backgroundColor' })}
+            defaultValue={defaultValue}
+            onChange={handleChange}
+          />
+        );
+      }
       return (
         <NullableColorInput
           label={t.formatMessage({ id: 'backgroundColor' })}

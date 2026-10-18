@@ -86,6 +86,7 @@
   "syncLinkedOrganisation": "Lié à l'organisation. La valeur ne peut pas être modifiée ici. Cliquez pour délier et donner à cet e-mail sa propre valeur.",
   "syncUnlinkedCampaign": "Non lié : cet e-mail a sa propre valeur. Cliquez pour le lier à la campagne, l'e-mail suit alors le réglage de la campagne.",
   "syncUnlinkedOrganisation": "Non lié : cet e-mail a sa propre valeur. Cliquez pour le lier à l'organisation, l'e-mail suit alors le réglage de l'organisation.",
+  "logoBackgroundSwitch": "Couleur de marque derrière le logo",
   "meetingButton": "Bouton de réunion",
   "meetingButtonLabel": "Bouton à la place de la ligne du lieu",
   "meetingButtonFallback": "La ligne du lieu reste dans le texte et figure dans l'e-mail dès que le lieu d'un rendez-vous n'est pas un lien.",

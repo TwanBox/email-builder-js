@@ -18,6 +18,9 @@ import { chooseMeetingButton } from './locationLine';
  * The meeting button tokens (BUTTON_TOKENS, §3.10) do it once more for whether a mail shows its
  * meeting button and for the button's size and style, and BUTTON_TEXT_TOKEN is the button's text in
  * the campaign's language.
+ *
+ * The logo background tokens (BACKGROUND_TOKENS, §3.11) stand for the background of the logo: the
+ * brand colour of the same campaign or organisation when its `logoBackground` is on, else none.
  */
 
 export type TBrandKind = 'logo' | 'brand' | 'button' | 'buttonText';
@@ -64,8 +67,13 @@ export type TButtonValues = {
   buttonFormat: TButtonFormat | null;
 };
 
+/** Whether the logo sits on the brand colour, as set on a campaign or an organisation. */
+export type TBackgroundValues = {
+  logoBackground: boolean | null;
+};
+
 /** The settings a field can be linked to, and a campaign's can be changed from here. */
-export type TCampaignSettings = TLayoutValues & TButtonValues;
+export type TCampaignSettings = TLayoutValues & TButtonValues & TBackgroundValues;
 
 type TBrandValues = {
   logoUrl: string | null;
@@ -101,6 +109,7 @@ const NO_VALUES: TBrandValues = {
   logoWidth: null,
   headerBrandingBar: null,
   footerBrandingBar: null,
+  logoBackground: null,
   showButton: null,
   buttonSize: null,
   buttonFormat: null,
@@ -175,6 +184,16 @@ export const BUTTON_TOKENS: TButtonToken[] = (['endClient', 'organisation'] as c
   }))
 );
 
+export type TBackgroundToken = { nl: string; en: string; source: TBrandSource };
+
+// Must match BACKGROUND_TOKENS in tele-mailing-backend src/utils/brand-tokens.ts. Sits in an Image's
+// `style.backgroundColor`.
+export const BACKGROUND_TOKENS: TBackgroundToken[] = (['endClient', 'organisation'] as const).map((source) => ({
+  nl: `LOGO_ACHTERGROND_${source === 'endClient' ? 'EINDKLANT' : 'ORGANISATIE'}`,
+  en: `LOGO_BACKGROUND_${source === 'endClient' ? 'ENDCLIENT' : 'ORGANISATION'}`,
+  source,
+}));
+
 // The values of `buttonSize` on a campaign and an organisation, and the size a Button block calls it.
 export const BUTTON_SIZES: Record<TButtonSize, 'x-small' | 'small' | 'medium' | 'large'> = {
   xs: 'x-small',
@@ -226,6 +245,12 @@ for (const token of BUTTON_TOKENS) {
 
 const BUTTON_TEXT_NAMES = new Set([BUTTON_TEXT_TOKEN.nl, BUTTON_TEXT_TOKEN.en]);
 
+const BACKGROUND_BY_NAME = new Map<string, TBackgroundToken>();
+for (const token of BACKGROUND_TOKENS) {
+  BACKGROUND_BY_NAME.set(token.nl, token);
+  BACKGROUND_BY_NAME.set(token.en, token);
+}
+
 const FIELD: Record<TBrandKind, 'logoUrl' | 'brandColor' | 'buttonColor' | 'buttonTextColor'> = {
   logo: 'logoUrl',
   brand: 'brandColor',
@@ -257,6 +282,7 @@ export function parseBrand(input: unknown): TBrand {
       logoWidth: whole(r.logoWidth, 1),
       headerBrandingBar: flag(r.headerBrandingBar),
       footerBrandingBar: flag(r.footerBrandingBar),
+      logoBackground: flag(r.logoBackground),
       showButton: flag(r.showButton),
       buttonSize: r.buttonSize in BUTTON_SIZES ? r.buttonSize : null,
       buttonFormat: BUTTON_FORMATS.includes(r.buttonFormat) ? r.buttonFormat : null,
@@ -339,6 +365,28 @@ export function buttonValue(token: TButtonToken, brand: TBrand): boolean | strin
   }
 }
 
+export function backgroundToken(source: TBrandSource): TBackgroundToken {
+  return BACKGROUND_TOKENS.find((token) => token.source === source)!;
+}
+
+/** The logo background token a field holds, if its whole value is one (a linked logo background). */
+export function backgroundTokenOf(value: unknown): TBackgroundToken | null {
+  if (typeof value !== 'string') return null;
+  const match = EXACT_TOKEN.exec(value);
+  return match ? BACKGROUND_BY_NAME.get(match[1]) ?? null : null;
+}
+
+/**
+ * What a logo background token stands for: the brand colour of the same campaign or organisation when
+ * its `logoBackground` is on (white when that colour is empty), else no background - the same the
+ * backend renders a sent mail with.
+ */
+export function backgroundValue(token: TBackgroundToken, brand: TBrand): string | null {
+  const values = brand[token.source];
+  if (values.logoBackground !== true) return null;
+  return values.brandColor || MISSING_COLOR;
+}
+
 /**
  * `data` with every brand token filled in from `brand`; other `{{VAR}}`s are left as they are.
  * Parts without a token keep their identity, so a template without tokens comes back unchanged.
@@ -353,6 +401,9 @@ export function resolveBrandTokens<T>(data: T, brand: TBrand): T {
       // And one that is exactly a meeting button token the boolean, size or style.
       const button = buttonTokenOf(node);
       if (button) return buttonValue(button, brand);
+      // And one that is exactly a logo background token the brand colour, or no background.
+      const background = backgroundTokenOf(node);
+      if (background) return backgroundValue(background, brand);
       return node.replace(TOKEN, (match, name) => {
         const token = TOKENS_BY_NAME.get(name);
         if (token) return brandValue(token, brand);
@@ -360,7 +411,9 @@ export function resolveBrandTokens<T>(data: T, brand: TBrand): T {
         const inText = LAYOUT_BY_NAME.get(name);
         if (inText) return String(layoutValue(inText, brand) ?? '');
         const buttonInText = BUTTON_BY_NAME.get(name);
-        return buttonInText ? String(buttonValue(buttonInText, brand)) : match;
+        if (buttonInText) return String(buttonValue(buttonInText, brand));
+        const backgroundInText = BACKGROUND_BY_NAME.get(name);
+        return backgroundInText ? backgroundValue(backgroundInText, brand) ?? '' : match;
       });
     }
     if (Array.isArray(node)) {
@@ -406,7 +459,9 @@ export function brandTokensOfKind(kind: TBrandKind): TBrandToken[] {
 /** The colour a field shows: the brand value for a linked field, the field's own colour otherwise. */
 export function displayColor(value: string | null | undefined, brand: TBrand): string | null {
   const token = brandTokenOf(value);
-  return token ? brandValue(token, brand) : value ?? null;
+  if (token) return brandValue(token, brand);
+  const background = backgroundTokenOf(value);
+  return background ? backgroundValue(background, brand) : value ?? null;
 }
 
 /**
@@ -421,7 +476,7 @@ export function safeParseWithBrandTokens<S extends z.ZodTypeAny>(
   data: unknown
 ): z.SafeParseReturnType<unknown, z.infer<S>> {
   const probe = (node: unknown): unknown => {
-    if (brandTokenOf(node)) return '#000000';
+    if (brandTokenOf(node) || backgroundTokenOf(node)) return '#000000';
     const layout = layoutTokenOf(node);
     if (layout) return layout.kind === 'headerBar' || layout.kind === 'footerBar' ? true : 0;
     const button = buttonTokenOf(node);

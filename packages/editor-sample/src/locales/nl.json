@@ -90,6 +90,7 @@
   "syncLinkedOrganisation": "Gekoppeld aan de organisatie. De waarde is hier niet te wijzigen. Klik om los te koppelen en deze e-mail een eigen waarde te geven.",
   "syncUnlinkedCampaign": "Niet gekoppeld: deze e-mail heeft een eigen waarde. Klik om te koppelen aan de campagne, de e-mail volgt dan de instelling van de campagne.",
   "syncUnlinkedOrganisation": "Niet gekoppeld: deze e-mail heeft een eigen waarde. Klik om te koppelen aan de organisatie, de e-mail volgt dan de instelling van de organisatie.",
+  "logoBackgroundSwitch": "Merkkleur achter logo",
   "meetingButton": "Meeting-knop",
   "meetingButtonLabel": "Knop in plaats van locatieregel",
   "meetingButtonFallback": "De regel met de locatie staat nog in de tekst en komt in de e-mail zodra de locatie van een afspraak geen link is.",
