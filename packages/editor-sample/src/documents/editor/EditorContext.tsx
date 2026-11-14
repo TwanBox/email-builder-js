@@ -28,9 +28,18 @@ type TValue = {
   brand: TBrand;
   // The campaign's settings (logo layout, branding bars, meeting button) that were changed here,
   // through a field linked to them. They go to tele-mailing with every CONFIG_UPDATED, which saves
-  // them on the campaign with the mail.
-  campaignChanges: Partial<TCampaignSettings>;
+  // them on the campaign with the mail. A new end client logo goes along the same way.
+  campaignChanges: Partial<TCampaignSettings> & { endClientLogoUrl?: string };
+
+  // Whether the end client logo can be replaced here: tele-mailing says so for a mail with a campaign.
+  canEditLogo: boolean;
+  // A new end client logo on its way: tele-mailing converts and stores it, and answers.
+  logoUpload: { busy: boolean; error: TLogoError | null };
 };
+
+/** Why a new logo did not come through, as tele-mailing says it. */
+export type TLogoError = 'tooLarge' | 'unreadable' | 'notFetched' | 'failed';
+const LOGO_ERRORS: TLogoError[] = ['tooLarge', 'unreadable', 'notFetched', 'failed'];
 
 const editorStateStore = create<TValue>(() => ({
   document: getConfiguration(window.location.hash),
@@ -49,6 +58,9 @@ const editorStateStore = create<TValue>(() => ({
 
   brand: EMPTY_BRAND,
   campaignChanges: {},
+
+  canEditLogo: false,
+  logoUpload: { busy: false, error: null },
 }));
 
 // Listen for LOAD_TEMPLATE messages from the parent window.
@@ -74,9 +86,65 @@ window.addEventListener('message', (event: MessageEvent) => {
     }
     // The campaign's and organisation's logo and colours, for previewing brand tokens.
     // A load is a fresh start: after a save tele-mailing sends the saved values back.
-    editorStateStore.setState({ brand: parseBrand(brand), campaignChanges: {} });
+    editorStateStore.setState({
+      brand: parseBrand(brand),
+      campaignChanges: {},
+      canEditLogo: event.data.payload?.canEditLogo === true,
+      logoUpload: { busy: false, error: null },
+    });
+  }
+
+  // The answer to requestEndClientLogo: the new logo stored, with the logo settings that fit it.
+  if (event.data?.type === 'LOGO_READY') {
+    applyEndClientLogo(event.data.payload?.url, event.data.payload?.layout);
+  }
+  if (event.data?.type === 'LOGO_FAILED') {
+    const error = event.data.payload?.error;
+    editorStateStore.setState({ logoUpload: { busy: false, error: LOGO_ERRORS.includes(error) ? error : 'failed' } });
   }
 });
+
+/**
+ * A new end client logo: a file dropped, chosen or pasted, or the address of an image dragged from a
+ * website. tele-mailing converts it to PNG and stores it as the wizard does, and answers with
+ * LOGO_READY or LOGO_FAILED.
+ */
+export function requestEndClientLogo(input: { file: File } | { url: string }) {
+  if (!window.parent || window.parent === window) return;
+  editorStateStore.setState({ logoUpload: { busy: true, error: null } });
+  window.parent.postMessage(
+    'file' in input ? { type: 'LOGO_FILE', payload: { file: input.file } } : { type: 'LOGO_URL', payload: { url: input.url } },
+    '*'
+  );
+}
+
+/**
+ * The new end client logo in the canvas, with the logo settings that fit it (width, padding, the
+ * brand colour behind it, the branding bar above it), as campaign changes: saved on the campaign
+ * with the mail, like a linked field.
+ */
+function applyEndClientLogo(url: unknown, layout: unknown) {
+  const { brand, campaignChanges } = editorStateStore.getState();
+  // Read like a LOAD_TEMPLATE brand: only an https address and values in range come through.
+  const parsed = parseBrand({ endClient: { ...(layout && typeof layout === 'object' ? layout : {}), logoUrl: url } }).endClient;
+  if (!parsed.logoUrl) {
+    editorStateStore.setState({ logoUpload: { busy: false, error: 'failed' } });
+    return;
+  }
+  const values = {
+    logoWidth: parsed.logoWidth,
+    logoPaddingTop: parsed.logoPaddingTop,
+    logoPaddingBottom: parsed.logoPaddingBottom,
+    logoBackground: parsed.logoBackground,
+    headerBrandingBar: parsed.headerBrandingBar,
+  };
+  editorStateStore.setState({
+    brand: { ...brand, endClient: { ...brand.endClient, logoUrl: parsed.logoUrl, ...values } },
+    campaignChanges: { ...campaignChanges, endClientLogoUrl: parsed.logoUrl, ...values },
+    logoUpload: { busy: false, error: null },
+  });
+  notifyParent();
+}
 
 // Tell tele-mailing what there is to save: the template, the text version and any campaign setting
 // that was changed through a linked field.
@@ -105,6 +173,14 @@ if (window.parent && window.parent !== window) {
 
 export function useDocument() {
   return editorStateStore((s) => s.document);
+}
+
+export function useCanEditLogo() {
+  return editorStateStore((s) => s.canEditLogo);
+}
+
+export function useLogoUpload() {
+  return editorStateStore((s) => s.logoUpload);
 }
 
 export function useBrand() {

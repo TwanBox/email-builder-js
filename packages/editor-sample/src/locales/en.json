@@ -97,5 +97,13 @@
   "meetingButtonNotOnline": "This campaign offers more than an online meeting. The email therefore always shows the line with the location, for an online appointment too.",
   "meetingButtonNone": "This email does not mention the appointment's location, so there is nothing to switch.",
   "meetingButtonUnmanaged": "This email holds the location in a way that cannot be switched here: inside a sentence, in an HTML block, or a button and a line side by side. Change it in the email itself.",
-  "locationLineHidden": "The line with the location is not in the email while the meeting button shows."
+  "locationLineHidden": "The line with the location is not in the email while the meeting button shows.",
+  "editLogo": "Edit",
+  "logoDropHint": "Drag an image here or click to choose one",
+  "logoConverting": "Converting image…",
+  "logoUnreadable": "We cannot read this image. Try a PNG, JPG or SVG.",
+  "logoNotFetched": "This image could not be fetched. Save it and drag the file here.",
+  "logoTooLarge": "This image is larger than 10 MB.",
+  "logoFailed": "The logo could not be stored. Please try again.",
+  "logoPngNote": "Images will be converted to PNG format automatically."
 }
