@@ -11,6 +11,7 @@ import { meetingButtonShown } from '../../../../documents/editor/meetingButton';
 import BaseSidebarPanel from './helpers/BaseSidebarPanel';
 // import BooleanInput from './helpers/inputs/BooleanInput';
 import TextInput from './helpers/inputs/TextInput';
+import useInlineEditRevision from '../../../../documents/blocks/helpers/block-wrappers/useInlineEditRevision';
 import MultiStylePropertyPanel from './helpers/style-inputs/MultiStylePropertyPanel';
 
 import { useIntl } from 'react-intl';
@@ -20,6 +21,7 @@ type TextSidebarPanelProps = {
   setData: (v: TextProps) => void;
 };
 export default function TextSidebarPanel({ data, setData }: TextSidebarPanelProps) {
+  const inlineEdits = useInlineEditRevision();
   const [, setErrors] = useState<Zod.ZodError | null>(null);
 
   const updateData = (d: unknown) => {
@@ -41,6 +43,7 @@ export default function TextSidebarPanel({ data, setData }: TextSidebarPanelProp
   return (
     <BaseSidebarPanel title={t.formatMessage({ id: 'textBlock' })}>
       <TextInput
+        key={inlineEdits}
         label={t.formatMessage({ id: 'content' })}
         rows={5}
         defaultValue={data.props?.text ?? ''}

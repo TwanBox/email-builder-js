@@ -8,6 +8,7 @@ import { safeParseWithBrandTokens } from '../../../../documents/editor/brandToke
 import BaseSidebarPanel from './helpers/BaseSidebarPanel';
 import RadioGroupInput from './helpers/inputs/RadioGroupInput';
 import TextInput from './helpers/inputs/TextInput';
+import useInlineEditRevision from '../../../../documents/blocks/helpers/block-wrappers/useInlineEditRevision';
 import MultiStylePropertyPanel from './helpers/style-inputs/MultiStylePropertyPanel';
 
 import { useIntl } from 'react-intl';
@@ -17,6 +18,7 @@ type HeadingSidebarPanelProps = {
   setData: (v: HeadingProps) => void;
 };
 export default function HeadingSidebarPanel({ data, setData }: HeadingSidebarPanelProps) {
+  const inlineEdits = useInlineEditRevision();
   const [, setErrors] = useState<Zod.ZodError | null>(null);
 
   const updateData = (d: unknown) => {
@@ -34,6 +36,7 @@ export default function HeadingSidebarPanel({ data, setData }: HeadingSidebarPan
   return (
     <BaseSidebarPanel title={t.formatMessage({ id: 'headingBlock' })}>
       <TextInput
+        key={inlineEdits}
         label={t.formatMessage({ id: 'content' })}
         rows={3}
         defaultValue={data.props?.text ?? HeadingPropsDefaults.text}
