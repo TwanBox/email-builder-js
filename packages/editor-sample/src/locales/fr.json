@@ -93,5 +93,13 @@
   "meetingButtonNotOnline": "Cette campagne ne propose pas uniquement une réunion en ligne. L'e-mail affiche donc toujours la ligne du lieu, même pour un rendez-vous en ligne.",
   "meetingButtonNone": "Cet e-mail ne mentionne pas le lieu du rendez-vous, il n'y a donc rien à basculer.",
   "meetingButtonUnmanaged": "Le lieu figure dans cet e-mail d'une manière qui ne peut pas être basculée ici : au milieu d'une phrase, dans un bloc HTML, ou un bouton et une ligne côte à côte. Modifiez-le dans l'e-mail lui-même.",
-  "locationLineHidden": "La ligne du lieu ne figure pas dans l'e-mail tant que le bouton de réunion est affiché."
+  "locationLineHidden": "La ligne du lieu ne figure pas dans l'e-mail tant que le bouton de réunion est affiché.",
+  "editLogo": "Modifier",
+  "logoDropHint": "Glissez une image ici ou cliquez pour en choisir une",
+  "logoConverting": "Conversion de l'image…",
+  "logoUnreadable": "Nous ne pouvons pas lire cette image. Essayez un PNG, JPG ou SVG.",
+  "logoNotFetched": "Cette image n'a pas pu être récupérée. Enregistrez-la et faites glisser le fichier ici.",
+  "logoTooLarge": "Cette image dépasse 10 Mo.",
+  "logoFailed": "Le logo n'a pas pu être enregistré. Veuillez réessayer.",
+  "logoPngNote": "Les images seront automatiquement converties au format PNG."
 }
