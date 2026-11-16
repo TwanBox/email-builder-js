@@ -50,7 +50,7 @@ export default function LogoDropZone() {
   const take = (input: { file: File } | { url: string } | null) => {
     if (!input) return setUnreadable(true);
     setUnreadable(false);
-    requestEndClientLogo(input);
+    void requestEndClientLogo(input);
   };
 
   // A copied image pasted while the area is open is the logo; pasted text stays where it is typed.

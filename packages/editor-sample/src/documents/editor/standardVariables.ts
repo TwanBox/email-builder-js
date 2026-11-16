@@ -37,6 +37,7 @@ export const STANDARD_VARIABLES: TStandardVariable[] = [
   { nl: 'AFSPRAAK_ANNULEER_URL', en: 'APPOINTMENT_CANCEL_URL' },
   { nl: 'BEDRIJFSNAAM_ACCOUNTMANAGER', en: 'COMPANY_NAME_ACCOUNT_MANAGER' },
   { nl: 'BEDRIJFSNAAM_ORGANISATIE', en: 'COMPANY_NAME_ORGANISATION' },
+  { nl: 'NAAM_AGENT', en: 'NAME_AGENT', hint: 'Naam van de agent', hintEn: 'Name of the agent' },
 ];
 
 /** `{{NAME}}` in the organisation's language. */

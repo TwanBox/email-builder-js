@@ -109,13 +109,23 @@ window.addEventListener('message', (event: MessageEvent) => {
  * website. tele-mailing converts it to PNG and stores it as the wizard does, and answers with
  * LOGO_READY or LOGO_FAILED.
  */
-export function requestEndClientLogo(input: { file: File } | { url: string }) {
+export async function requestEndClientLogo(input: { file: File } | { url: string }) {
   if (!window.parent || window.parent === window) return;
   editorStateStore.setState({ logoUpload: { busy: true, error: null } });
-  window.parent.postMessage(
-    'file' in input ? { type: 'LOGO_FILE', payload: { file: input.file } } : { type: 'LOGO_URL', payload: { url: input.url } },
-    '*'
-  );
+  if ('file' in input) {
+    // A copy in memory, not the file on disk: Chrome lets only this frame upload a chosen or dropped
+    // file, and tele-mailing (another site in production) would get net::ERR_ACCESS_DENIED.
+    let file: File;
+    try {
+      file = new File([await input.file.arrayBuffer()], input.file.name, { type: input.file.type });
+    } catch {
+      editorStateStore.setState({ logoUpload: { busy: false, error: 'unreadable' } });
+      return;
+    }
+    window.parent.postMessage({ type: 'LOGO_FILE', payload: { file } }, '*');
+    return;
+  }
+  window.parent.postMessage({ type: 'LOGO_URL', payload: { url: input.url } }, '*');
 }
 
 /**
